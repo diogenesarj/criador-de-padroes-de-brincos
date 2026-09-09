@@ -3,67 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Padrões de Brincos - Versão 3.0</title>
+    <title>Criador de Padrões de Brincos - Versão 4.0 (IA)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estilo para deixar o canvas com "ar" de missanga (bordas arredondadas no grid) */
-        .bead-canvas {
-            image-rendering: pixelated; /* Mantém a nitidez ao redimensionar */
-        }
+        .bead-canvas { image-rendering: pixelated; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen p-4 flex flex-col items-center">
 
     <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-700">
-        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Gráficos - Missanga Art</h1>
-        <p class="text-sm text-gray-400 text-center mb-6">Foto mais realista e opção de par simétrico ou idêntico.</p>
+        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Gráficos - IA de Cores</h1>
+        <p class="text-sm text-gray-400 text-center mb-6">Agora com unificação automática de cores próximas. Escolha o limite de cores.</p>
 
         <!-- Controles -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-            <div class="md:col-span-2">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">1. Foto do Desenho</label>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+            <div class="col-span-2 md:col-span-1">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">1. Foto</label>
                 <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-900 hover:file:bg-emerald-400 cursor-pointer">
             </div>
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura de Cada Brinco</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura</label>
                 <input type="number" id="colsInput" value="25" min="5" max="60" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
             </div>
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura (Linhas)</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura</label>
                 <input type="number" id="rowsInput" value="40" min="5" max="100" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-1"><b>Máx. Cores</b> (IA)</label>
+                <input type="number" id="maxColorsInput" value="8" min="2" max="32" class="w-full bg-gray-900 border-2 border-emerald-500 rounded-xl px-3 py-2 text-white font-bold text-lg">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Modo</label>
+                <select id="modeInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm">
+                    <option value="sym">Simétrico (Esq+Dir)</option>
+                    <option value="single">Único (Iguais)</option>
+                </select>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            <div class="md:col-span-2">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">2. Modo de Geração</label>
-                <select id="modeInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
-                    <option value="sym">Par Simétrico (Esquerdo + Direito Espelhado)</option>
-                    <option value="single">Imagem Única (Lados Esquerdo e Direito Iguais)</option>
-                </select>
-            </div>
-            <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
-                Gerar Gráfico Realista
-            </button>
-        </div>
+        <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
+            Gerar Gráfico com IA de Cores Unificadas
+        </button>
     </div>
 
     <!-- Resultados Lado a Lado -->
     <div id="resultContainer" class="w-full max-w-4xl hidden flex flex-col gap-6">
-        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Brinco Esquerdo -->
             <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
                 <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Esquerdo</h2>
                 <div class="overflow-x-auto w-full flex justify-center mb-4 relative">
                     <canvas id="canvasLeft" class="bead-canvas border border-gray-600 rounded shadow-md bg-white"></canvas>
-                    <!-- Sobreposição de grade para simular as miçangas -->
-                    <div id="gridOverlayLeft" class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
+                    <div class="absolute inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Paleta Usada (Esq)</h3>
                 <div id="summaryLeft" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas</h3>
-                <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
             </div>
 
             <!-- Brinco Direito -->
@@ -71,183 +66,186 @@
                 <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Direito</h2>
                 <div class="overflow-x-auto w-full flex justify-center mb-4 relative">
                     <canvas id="canvasRight" class="bead-canvas border border-gray-600 rounded shadow-md bg-white"></canvas>
-                    <div id="gridOverlayRight" class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
+                    <div class="absolute inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Paleta Usada (Dir)</h3>
                 <div id="summaryRight" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas</h3>
-                <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
             </div>
         </div>
-
+         <!-- Passo a Passo por Linha (Comum para ambos) -->
+        <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 w-full">
+            <h2 class="text-lg font-bold text-gray-200 mb-3">Contagem por Linha (Padrão para ambos)</h2>
+            <div id="rowSummary" class="max-h-60 overflow-y-auto space-y-1.5 text-xs text-gray-300 pr-2 font-mono"></div>
+        </div>
     </div>
 
     <script>
-        // Aumentei o tamanho do "pixel" na tela para 10x10px para dar mais definição
-        const pixelSize = 10; 
+        const beadSize = 10; 
 
         function processImage() {
             const fileInput = document.getElementById('imageInput');
-            if (fileInput.files.length === 0) {
-                alert('Por favor, selecione uma imagem primeiro.');
-                return;
-            }
+            if (fileInput.files.length === 0) { alert('Selecione uma imagem.'); return; }
 
             const cols = parseInt(document.getElementById('colsInput').value);
             const rows = parseInt(document.getElementById('rowsInput').value);
             const mode = document.getElementById('modeInput').value;
+            const maxColors = parseInt(document.getElementById('maxColorsInput').value);
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    generateEarrings(img, cols, rows, mode);
+                    generateEarrings(img, cols, rows, mode, maxColors);
                 }
                 img.src = e.target.result;
             }
             reader.readAsDataURL(fileInput.files[0]);
         }
 
-        function generateEarrings(img, cols, rows, mode) {
+        function generateEarrings(img, cols, rows, mode, maxColors) {
             const canvasL = document.getElementById('canvasLeft');
             const canvasR = document.getElementById('canvasRight');
-            const ctxL = canvasL.getContext('2d');
-            const ctxR = canvasR.getContext('2d');
+            const ctxL = canvasL.getContext('2d', { alpha: false });
+            const ctxR = canvasR.getContext('2d', { alpha: false });
 
-            canvasL.width = cols * pixelSize;
-            canvasL.height = rows * pixelSize;
-            canvasR.width = cols * pixelSize;
-            canvasR.height = rows * pixelSize;
+            canvasL.width = cols * beadSize; canvasL.height = rows * beadSize;
+            canvasR.width = cols * beadSize; canvasR.height = rows * beadSize;
 
             const tempCanvas = document.createElement('canvas');
             const drawWidth = (mode === 'sym') ? cols * 2 : cols;
-            tempCanvas.width = drawWidth;
-            tempCanvas.height = rows;
+            tempCanvas.width = drawWidth; tempCanvas.height = rows;
             const tempCtx = tempCanvas.getContext('2d');
             tempCtx.drawImage(img, 0, 0, drawWidth, rows);
 
-            let imgDataLeft, imgDataRight;
+            const imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+            const imgDataRight = (mode === 'sym') ? tempCtx.getImageData(cols, 0, cols, rows) : imgDataLeft;
 
-            if (mode === 'sym') {
-                // Modo Simétrico (Esq/Dir Espelhado)
-                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-                imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
-                
-                // Processa Esquerdo (sem mirror)
-                const resultL = processSideRealistic(ctxL, imgDataLeft, cols, rows, false);
-                displayData(resultL, 'summaryLeft', 'rowsLeft');
+            // --- MÁGICA DA IA AQUI: Redução de Cores (K-Means simplificado) ---
+            // Processa a imagem inteira para encontrar as cores dominantes do par
+            const combinedData = tempCtx.getImageData(0,0, drawWidth, rows).data;
+            const dominantPalette = quantizeImageColors(combinedData, maxColors);
 
-                // Processa Direito (com mirror)
-                const resultR = processSideRealistic(ctxR, imgDataRight, cols, rows, true);
-                displayData(resultR, 'summaryRight', 'rowsRight');
-                
-                document.getElementById('gridOverlayLeft').style.display = 'block';
-                document.getElementById('gridOverlayRight').style.display = 'block';
-            } else {
-                // Modo Imagem Única (Esq/Dir Iguais)
-                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-                
-                const resultL = processSideRealistic(ctxL, imgDataLeft, cols, rows, false);
-                displayData(resultL, 'summaryLeft', 'rowsLeft');
+            // Processa Esquerdo
+            const resultL = processSideWithPalette(ctxL, imgDataLeft, cols, rows, false, dominantPalette);
+            displayPalette('summaryLeft', resultL.paletteCount);
 
-                const resultR = processSideRealistic(ctxR, imgDataLeft, cols, rows, false);
-                displayData(resultR, 'summaryRight', 'rowsRight');
+            // Processa Direito (com mirror se necessário)
+            const resultR = processSideWithPalette(ctxR, imgDataRight, cols, rows, (mode === 'sym'), dominantPalette);
+            displayPalette('summaryRight', resultR.paletteCount);
 
-                document.getElementById('gridOverlayLeft').style.display = 'block';
-                document.getElementById('gridOverlayRight').style.display = 'block';
-            }
+            // Exibe resumo de linhas (usando o lado esquerdo como base, já que são iguais ou o par se completa)
+            displayRowSummary(resultL.rowDetails);
 
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        // Novo algoritmo de processamento mais realista (mantém detalhes e cria efeito de pontilhado)
-        function processSideRealistic(ctx, imgData, cols, rows, mirror) {
-            const data = imgData.data;
-            const colorCounts = {};
-            const rowDetails = [];
+        // Algoritmo K-Means Simplificado para encontrar a paleta dominante
+        function quantizeImageColors(pixelData, maxColors) {
+            // Converte Uint8ClampedArray para array de pixels [r,g,b] ignorando alfa
+            let pixels = [];
+            for(let i = 0; i < pixelData.length; i += 4) {
+                pixels.push([pixelData[i], pixelData[i+1], pixelData[i+2]]);
+            }
 
-            // Limpa o canvas
-            ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
+            // Se houver menos cores do que o solicitado, retorna as cores únicas
+            let uniqueColors = getUniqueColors(pixels);
+            if(uniqueColors.length <= maxColors) return uniqueColors;
+
+            // K-Means Básico (Centroids iniciais aleatórios)
+            let centroids = [];
+            for(let i = 0; i < maxColors; i++) {
+                centroids.push(pixels[Math.floor(Math.random() * pixels.length)]);
+            }
+
+            let currentAssignments = new Array(pixels.length);
+            let iterations = 10; // Poucas iterações para ser rápido no WebApp
+
+            while(iterations--) {
+                let newCentroids = new Array(maxColors).fill(0).map(()=>[0,0,0]);
+                let counts = new Array(maxColors).fill(0);
+
+                for(let i = 0; i < pixels.length; i++) {
+                    let minDist = Infinity;
+                    let assignedCentroid = 0;
+                    for(let j = 0; j < maxColors; j++) {
+                        let dist = colorDistance(pixels[i], centroids[j]);
+                        if(dist < minDist) {
+                            minDist = dist;
+                            assignedCentroid = j;
+                        }
+                    }
+                    currentAssignments[i] = assignedCentroid;
+                    newCentroids[assignedCentroid][0] += pixels[i][0];
+                    newCentroids[assignedCentroid][1] += pixels[i][1];
+                    newCentroids[assignedCentroid][2] += pixels[i][2];
+                    counts[assignedCentroid]++;
+                }
+
+                for(let j = 0; j < maxColors; j++) {
+                    if(counts[j] > 0) {
+                        centroids[j][0] = Math.round(newCentroids[j][0] / counts[j]);
+                        centroids[j][1] = Math.round(newCentroids[j][1] / counts[j]);
+                        centroids[j][2] = Math.round(newCentroids[j][2] / counts[j]);
+                    }
+                }
+            }
+            return centroids.map(c => rgbToHex(c[0],c[1],c[2]));
+        }
+
+        function getUniqueColors(pixels) {
+            let seen = new Set();
+            let result = [];
+            for(let p of pixels) {
+                let hex = rgbToHex(p[0],p[1],p[2]);
+                if(!seen.has(hex)) {
+                    seen.add(hex);
+                    result.push(hex);
+                }
+            }
+            return result;
+        }
+
+        function colorDistance(c1, c2) {
+            return Math.pow(c1[0]-c2[0], 2) + Math.pow(c1[1]-c2[1], 2) + Math.pow(c1[2]-c2[2], 2);
+        }
+
+        // Processa o lado usando a paleta definida pela IA
+        function processSideWithPalette(ctx, imgData, cols, rows, mirror, palette) {
+            const data = imgData.data;
+            const paletteCount = {};
+            const rowDetails = [];
+            ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, cols * beadSize, rows * beadSize);
 
             for (let y = 0; y < rows; y++) {
                 let currentRowColors = {};
                 for (let x = 0; x < cols; x++) {
                     let targetX = mirror ? (cols - 1 - x) : x;
                     const index = (y * cols + targetX) * 4;
+                    const r = data[index]; const g = data[index + 1]; const b = data[index + 2]; const a = data[index + 3];
                     
-                    const r = data[index];
-                    const g = data[index + 1];
-                    const b = data[index + 2];
-                    const a = data[index + 3];
-                    
-                    // Trata transparência como branco
-                    if (a < 128) {
-                        const hex = '#FFFFFF';
-                         drawBead(ctx, x, y, hex, false);
-                         updateCounts(hex, colorCounts, currentRowColors);
-                        continue;
+                    let hex = '#FFFFFF';
+                    if(a > 128) {
+                        // Encontra a cor da paleta mais próxima para este pixel
+                        hex = findClosestColor(r, g, b, palette);
                     }
 
-                    // Tenta encontrar a cor mais próxima em uma paleta mais realista.
-                    // Aqui usamos uma quantização mais suave (agrupa menos as cores).
-                    const hex = rgbToHex(r, g, b);
+                    ctx.fillStyle = hex;
+                    ctx.fillRect(x * beadSize, y * beadSize, beadSize - 1, beadSize - 1); // Pequeno gap entre missangas
                     
-                    drawBead(ctx, x, y, hex, false);
-                    updateCounts(hex, colorCounts, currentRowColors);
+                    paletteCount[hex] = (paletteCount[hex] || 0) + 1;
+                    currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
                 }
                 rowDetails.push(currentRowColors);
             }
-            return { totals: colorCounts, rows: rowDetails };
+            return { paletteCount, rowDetails };
         }
 
-        // Função para desenhar cada "missanga" no canvas
-        function drawBead(ctx, x, y, hex, isTransparent) {
-            const px = x * pixelSize;
-            const py = y * pixelSize;
-            ctx.fillStyle = hex;
-            // Desenha um quadrado menor para simular a missanga individual
-            ctx.fillRect(px + 1, py + 1, pixelSize - 2, pixelSize - 2);
-        }
-
-        function updateCounts(hex, colorCounts, currentRowColors) {
-             colorCounts[hex] = (colorCounts[hex] || 0) + 1;
-             currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
-        }
-
-        function rgbToHex(r, g, b) {
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-        }
-
-        function displayData(result, summaryId, rowsId) {
-            // Ordena as cores mais usadas no resumo
-            const sortedTotals = Object.entries(result.totals).sort((a, b) => b[1] - a[1]);
-
-            const summaryDiv = document.getElementById(summaryId);
-            summaryDiv.innerHTML = '';
-            for (const [hex, count] of sortedTotals) {
-                summaryDiv.innerHTML += `
-                    <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                        <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
-                        <span class="text-xs text-gray-300"><b>${count}</b> un</span>
-                    </div>
-                `;
-            }
-
-            const rowDiv = document.getElementById(rowsId);
-            rowDiv.innerHTML = '';
-            result.rows.forEach((rowColors, index) => {
-                let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => `<span class="inline-flex items-center gap-0.5 mr-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background-color: ${hex};"></span>${count}</span>`)
-                    .join('');
-                
-                rowDiv.innerHTML += `
-                    <div class="bg-gray-900 p-1.5 rounded-xl border border-gray-700 flex items-start">
-                        <strong class="text-emerald-400 text-xs mr-2 w-8 text-right shrink-0">L${index + 1}:</strong> 
-                        <div class="flex flex-wrap">${detailsText}</div>
-                    </div>
-                `;
-            });
-        }
-    </script>
-</body>
-</html>
+        function findClosestColor(r, g, b, palette) {
+            let minDist = Infinity;
+            let closest = palette[0];
+            for (let i = 0; i < palette.length; i++) {
+                let pR = parseInt(palette[i].substr(1,2),16);
+                let pG = parseInt(palette[i].substr(3,2),16);
+                let pB = parseInt(palette[i].substr(5,2),16);
+                let dist = Math.pow(r-pR,2) + Math.pow(g-pG,2) + Math.pow(b-pB,2);
+                if(dist < minDist) { minDist = dist; closest = palette[i]; }

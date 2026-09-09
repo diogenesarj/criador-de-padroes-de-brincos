@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Par de Brincos (Esquerdo e Direito)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen p-4 flex flex-col items-center">
+
+    <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-700">
+        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Par de Brincos (Simétricos)</h1>
+        <p class="text-sm text-gray-400 text-center mb-6">Divida a imagem automaticamente em Brinco Esquerdo e Direito com contagem de missangas.</p>
+
+        <!-- Controles -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">1. Foto do Desenho</label>
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-900 hover:file:bg-emerald-400 cursor-pointer">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura de Cada Brinco</label>
+                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura (Linhas)</label>
+                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            </div>
+        </div>
+
+        <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
+            Gerar Par de Brincos (Esquerdo e Direito)
+        </button>
+    </div>
+
+    <!-- Resultados Lado a Lado -->
+    <div id="resultContainer" class="w-full max-w-4xl hidden flex flex-col gap-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Brinco Esquerdo -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
+                <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Esquerdo</h2>
+                <div class="overflow-x-auto w-full flex justify-center mb-4">
+                    <canvas id="canvasLeft" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Esq)</h3>
+                <div id="summaryLeft" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Esq)</h3>
+                <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
+            </div>
+
+            <!-- Brinco Direito -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
+                <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Direito</h2>
+                <div class="overflow-x-auto w-full flex justify-center mb-4">
+                    <canvas id="canvasRight" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Dir)</h3>
+                <div id="summaryRight" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Dir)</h3>
+                <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function processImage() {
+            const fileInput = document.getElementById('imageInput');
+            if (fileInput.files.length === 0) {
+                alert('Por favor, selecione uma imagem primeiro.');
+                return;
+            }
+
+            const cols = parseInt(document.getElementById('colsInput').value);
+            const rows = parseInt(document.getElementById('rowsInput').value);
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    generateEarrings(img, cols, rows);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        function generateEarrings(img, cols, rows) {
+            const pixelSize = 16;
+            
+            // Canvas esquerdo e direito
+            const canvasL = document.getElementById('canvasLeft');
+            const canvasR = document.getElementById('canvasRight');
+            const ctxL = canvasL.getContext('2d');
+            const ctxR = canvasR.getContext('2d');
+
+            canvasL.width = cols * pixelSize;
+            canvasL.height = rows * pixelSize;
+            canvasR.width = cols * pixelSize;
+            canvasR.height = rows * pixelSize;
+
+            // Canvas temporário com o dobro da largura para cortar a metade esquerda e direita da imagem original
+            const tempCanvas = document.createElement('canvas');
+            const totalCols = cols * 2;
+            tempCanvas.width = totalCols;
+            tempCanvas.height = rows;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(img, 0, 0, totalCols, rows);
+
+            // Extrair dados da metade esquerda e direita
+            const imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+            const imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
+
+            // Processar Brinco Esquerdo
+            const dataL = processSide(ctxL, imgDataLeft, cols, rows, pixelSize, false);
+            displayData(dataL, 'summaryLeft', 'rowsLeft');
+
+            // Processar Brinco Direito (Espelhado para manter a simetria correta do par)
+            const dataR = processSide(ctxR, imgDataRight, cols, rows, pixelSize, true);
+            displayData(dataR, 'summaryRight', 'rowsRight');
+
+            document.getElementById('resultContainer').classList.remove('hidden');
+        }
+
+        function processSide(ctx, imgData, cols, rows, pixelSize, mirror) {
+            const data = imgData.data;
+            ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
+
+            const colorCounts = {};
+            const rowDetails = [];
+
+            for (let y = 0; y < rows; y++) {
+                let currentRowColors = {};
+                for (let x = 0; x < cols; x++) {
+                    // Se for o lado direito e quisermos espelhar para casar o desenho:
+                    let targetX = mirror ? (cols - 1 - x) : x;
+                    const index = (y * cols + targetX) * 4;
+
+                    const r = data[index];
+                    const g = data[index + 1];
+                    const b = data[index + 2];
+
+                    const qr = Math.round(r / 64) * 64;
+                    const qg = Math.round(g / 64) * 64;
+                    const qb = Math.round(b / 64) * 64;
+                    const hex = rgbToHex(qr, qg, qb);
+
+                    // Desenha na tela real
+                    ctx.fillStyle = hex;
+                    ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    
+                    ctx.strokeStyle = '#e5e7eb';
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+
+                    colorCounts[hex] = (colorCounts[hex] || 0) + 1;
+                    currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
+                }
+                rowDetails.push(currentRowColors);
+            }
+            return { totals: colorCounts, rows: rowDetails };
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function displayData(result, summaryId, rowsId) {
+            const summaryDiv = document.getElementById(summaryId);
+            summaryDiv.innerHTML = '';
+            for (const [hex, count] of Object.entries(result.totals)) {
+                summaryDiv.innerHTML += `
+                    <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
+                        <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
+                        <span class="text-xs text-gray-300"><b>${count}</b> un</span>
+                    </div>
+                `;
+            }
+
+            const rowDiv = document.getElementById(rowsId);
+            rowDiv.innerHTML = '';
+            result.rows.forEach((rowColors, index) => {
+                let detailsText = Object.entries(rowColors)
+                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1 mr-2"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${hex};"></span>${count}</span>`)
+                    .join(' | ');
+                
+                rowDiv.innerHTML += `
+                    <div class="bg-gray-900 p-1.5 rounded-xl border border-gray-700">
+                        <strong class="text-emerald-400">L${index + 1}:</strong> ${detailsText}
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

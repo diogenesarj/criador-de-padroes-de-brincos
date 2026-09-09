@@ -6,21 +6,10 @@
     <title>Ateliê de Miçangas - Brick Stitch & Fringe Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #111827;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #374151;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-amber-500 selection:text-gray-950">
@@ -134,7 +123,7 @@
 
     <script>
         const beadSize = 20;
-        let loadedImageObj = null;
+        let imageDataURL = null;
 
         function previewFile() {
             const fileInput = document.getElementById('imageInput');
@@ -147,20 +136,15 @@
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    previewContainer.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                    
-                    const img = new Image();
-                    img.onload = function() {
-                        loadedImageObj = img;
-                    };
-                    img.src = e.target.result;
+                    imageDataURL = e.target.result;
+                    previewContainer.innerHTML = `<img src="${imageDataURL}" class="w-full h-full object-cover">`;
                 }
                 reader.readAsDataURL(file);
             }
         }
 
         function processImage() {
-            if (!loadedImageObj) {
+            if (!imageDataURL) {
                 alert('Por favor, selecione uma foto de referência válida primeiro.');
                 return;
             }
@@ -179,7 +163,14 @@
                 document.getElementById('titleRight').textContent = 'Peça 2';
             }
 
-            generateEarringProject(loadedImageObj, cols, rows, fringeRows, mode, maxColors);
+            const img = new Image();
+            img.onload = function() {
+                generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
+            };
+            img.onerror = function() {
+                alert('Erro ao carregar os dados da imagem. Tente outra foto.');
+            };
+            img.src = imageDataURL;
         }
 
         function generateEarringProject(img, cols, rows, fringeRows, mode, maxColors) {

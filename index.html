@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê de Miçangas - Criador de Brincos Pro</title>
+    <title>Ateliê de Miçangas - Brick Stitch & Fringe Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bead-canvas {
-            image-rendering: auto;
-        }
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -26,48 +23,52 @@
         }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-emerald-500 selection:text-gray-950">
+<body class="bg-gray-950 text-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-amber-500 selection:text-gray-950">
 
     <!-- Container Principal / Header -->
     <div class="w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-gray-800 backdrop-blur-md">
         <div class="flex flex-col items-center text-center mb-8">
-            <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê de Miçangas Realista</span>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Transformador de Foto em Miçangas</h1>
-            <p class="text-sm md:text-base text-gray-400 max-w-xl">Visualização detalhada com formato esférico de miçangas e espelhamento automático.</p>
+            <span class="px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Especialista em Brinco Artesanal</span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Brick Stitch & Beaded Fringe Designer</h1>
+            <p class="text-sm md:text-base text-gray-400 max-w-xl">Transforme qualquer foto no gráfico perfeito de miçangas com base estruturada e franjas pendentes.</p>
         </div>
 
         <!-- Controles -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">1. Foto de Referência</label>
-                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-gray-950 hover:file:bg-emerald-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+            <div class="space-y-2 lg:col-span-1">
+                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">1. Foto do Rosto</label>
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura (Miçangas)</label>
-                <input type="number" id="colsInput" value="15" min="5" max="60" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-emerald-500 transition">
+                <input type="number" id="colsInput" value="16" min="6" max="50" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Altura (Linhas)</label>
-                <input type="number" id="rowsInput" value="25" min="5" max="100" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-emerald-500 transition">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Altura do Rosto</label>
+                <input type="number" id="rowsInput" value="18" min="5" max="50" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">Máx. Cores (Paleta)</label>
-                <input type="number" id="maxColorsInput" value="6" min="2" max="20" class="w-full bg-gray-950/60 border-2 border-emerald-500/80 rounded-2xl px-4 py-2.5 text-white font-bold focus:outline-none focus:border-emerald-400 transition">
+                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">Franjas (Linhas)</label>
+                <input type="number" id="fringeRowsInput" value="10" min="0" max="30" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
+            </div>
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">Máx. Cores</label>
+                <input type="number" id="maxColorsInput" value="5" min="2" max="15" class="w-full bg-gray-950/60 border-2 border-amber-500/80 rounded-2xl px-4 py-2.5 text-white font-bold focus:outline-none focus:border-amber-400 transition">
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div class="md:col-span-1 space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Montagem</label>
-                <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
-                    <option value="sym">Par Simétrico (Espelhado L/R)</option>
-                    <option value="single">Imagem Inteira (Lados Idênticos)</option>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Par</label>
+                <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition">
+                    <option value="sym">Par Simétrico (Espelhado Esquerda/Direita)</option>
+                    <option value="single">Lados Idênticos</option>
                 </select>
             </div>
             <div class="md:col-span-2">
-                <button onclick="processImage()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Gerar Gráfico Realista de Miçangas
+                <button onclick="processImage()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Gerar Projeto de Brinco (Brick Stitch + Franjas)
                 </button>
             </div>
         </div>
@@ -77,57 +78,64 @@
     <div id="resultContainer" class="w-full max-w-5xl hidden flex flex-col gap-6">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Lado Esquerdo / Brinco 1 -->
+            <!-- Brinco 1 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
-                    <h2 id="titleLeft" class="text-lg font-bold text-emerald-400">Brinco Esquerdo</h2>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold uppercase tracking-wider">Painel 1</span>
+                    <h2 id="titleLeft" class="text-lg font-bold text-amber-400">Brinco Esquerdo</h2>
+                    <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/20 font-semibold uppercase tracking-wider">Painel 1</span>
                 </div>
                 
-                <div class="overflow-auto max-h-[480px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900 bead-canvas"></canvas>
+                <div class="overflow-auto max-h-[500px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores de Miçangas</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Miçangas por Cor</h3>
                 <div id="summaryLeft" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita por Linha</h3>
-                <div id="rowsLeft" class="max-h-52 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Base (Brick Stitch)</h3>
+                <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Franjas Pendentes</h3>
+                <div id="fringeLeft" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
 
-            <!-- Lado Direito / Brinco 2 -->
+            <!-- Brinco 2 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
-                    <h2 id="titleRight" class="text-lg font-bold text-emerald-400">Brinco Direito (Espelhado)</h2>
-                    <span class="text-[10px] bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full border border-teal-500/20 font-semibold uppercase tracking-wider">Painel 2</span>
+                    <h2 id="titleRight" class="text-lg font-bold text-amber-400">Brinco Direito (Espelhado)</h2>
+                    <span class="text-[10px] bg-orange-500/10 text-orange-300 px-2.5 py-1 rounded-full border border-orange-500/20 font-semibold uppercase tracking-wider">Painel 2</span>
                 </div>
 
-                <div class="overflow-auto max-h-[480px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900 bead-canvas"></canvas>
+                <div class="overflow-auto max-h-[500px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores de Miçangas</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Miçangas por Cor</h3>
                 <div id="summaryRight" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita por Linha</h3>
-                <div id="rowsRight" class="max-h-52 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Base (Brick Stitch)</h3>
+                <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Franjas Pendentes</h3>
+                <div id="fringeRight" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
         </div>
 
     </div>
 
     <script>
-        const beadSize = 22; // Tamanho visual de cada miçanga
+        const beadSize = 20;
 
         function processImage() {
             const fileInput = document.getElementById('imageInput');
             if (fileInput.files.length === 0) {
-                alert('Por favor, selecione uma imagem de referência primeiro.');
+                alert('Por favor, selecione uma foto de referência primeiro.');
                 return;
             }
 
             const cols = parseInt(document.getElementById('colsInput').value);
             const rows = parseInt(document.getElementById('rowsInput').value);
+            const fringeRows = parseInt(document.getElementById('fringeRowsInput').value);
             const mode = document.getElementById('modeInput').value;
             const maxColors = parseInt(document.getElementById('maxColorsInput').value);
 
@@ -135,31 +143,32 @@
                 document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
                 document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
             } else {
-                document.getElementById('titleLeft').textContent = 'Peça 1 (Completa)';
-                document.getElementById('titleRight').textContent = 'Peça 2 (Completa)';
+                document.getElementById('titleLeft').textContent = 'Peça 1';
+                document.getElementById('titleRight').textContent = 'Peça 2';
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    generateBeadsGrid(img, cols, rows, mode, maxColors);
+                    generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
                 }
                 img.src = e.target.result;
             }
             reader.readAsDataURL(fileInput.files[0]);
         }
 
-        function generateBeadsGrid(img, cols, rows, mode, maxColors) {
+        function generateEarringProject(img, cols, rows, fringeRows, mode, maxColors) {
             const canvasL = document.getElementById('canvasLeft');
             const canvasR = document.getElementById('canvasRight');
             const ctxL = canvasL.getContext('2d');
             const ctxR = canvasR.getContext('2d');
 
+            const totalHeight = rows + fringeRows;
             canvasL.width = cols * beadSize;
-            canvasL.height = rows * beadSize;
+            canvasL.height = totalHeight * beadSize;
             canvasR.width = cols * beadSize;
-            canvasR.height = rows * beadSize;
+            canvasR.height = totalHeight * beadSize;
 
             const tempCanvas = document.createElement('canvas');
             const drawWidth = (mode === 'sym') ? cols * 2 : cols;
@@ -182,14 +191,12 @@
                 imgDataRight = imgDataLeft;
             }
 
-            // Para o lado esquerdo (sem espelhamento interno de matriz)
-            const dataL = processSideAsBeads(ctxL, imgDataLeft, cols, rows, beadSize, false, palette);
-            displayData(dataL, 'summaryLeft', 'rowsLeft');
+            const dataL = processEarringSide(ctxL, imgDataLeft, cols, rows, fringeRows, beadSize, false, palette);
+            displayData(dataL, 'summaryLeft', 'rowsLeft', 'fringeLeft');
 
-            // Para o lado direito: se o modo for simétrico, espelhamos horizontalmente os pixels para formar o par simétrico perfeito
             const mirrorRight = (mode === 'sym');
-            const dataR = processSideAsBeads(ctxR, imgDataRight, cols, rows, beadSize, mirrorRight, palette);
-            displayData(dataR, 'summaryRight', 'rowsRight');
+            const dataR = processEarringSide(ctxR, imgDataRight, cols, rows, fringeRows, beadSize, mirrorRight, palette);
+            displayData(dataR, 'summaryRight', 'rowsRight', 'fringeRight');
 
             document.getElementById('resultContainer').classList.remove('hidden');
         }
@@ -253,19 +260,23 @@
             return rgbToHex(closestRGB[0], closestRGB[1], closestRGB[2]);
         }
 
-        function processSideAsBeads(ctx, imgData, cols, rows, size, mirror, palette) {
+        function processEarringSide(ctx, imgData, cols, rows, fringeRows, size, mirror, palette) {
             const data = imgData.data;
-            ctx.clearRect(0, 0, cols * size, rows * size);
+            const totalHeight = rows + fringeRows;
+            ctx.clearRect(0, 0, cols * size, totalHeight * size);
 
-            // Fundo escuro imitando base de apoio
             ctx.fillStyle = '#090d16';
-            ctx.fillRect(0, 0, cols * size, rows * size);
+            ctx.fillRect(0, 0, cols * size, totalHeight * size);
 
             const colorCounts = {};
             const rowDetails = [];
+            const fringeDetails = [];
 
+            // 1. Processar a Base (Brick Stitch - Rosto)
+            let matrixGrid = [];
             for (let y = 0; y < rows; y++) {
-                let currentRowColors = {};
+                let rowColors = {};
+                let rowArray = [];
                 for (let x = 0; x < cols; x++) {
                     let targetX = mirror ? (cols - 1 - x) : x;
                     const index = (y * cols + targetX) * 4;
@@ -280,51 +291,69 @@
                         hex = findClosestColorHex(r, g, b, palette);
                     }
 
-                    const posX = x * size;
-                    const posY = y * size;
-                    const radius = size * 0.42; // Deixa redondinho como uma miçanga real
-
-                    // Desenha o formato de miçanga esférica com gradiente de brilho e sombra
-                    const centerX = posX + size / 2;
-                    const centerY = posY + size / 2;
-
-                    let gradient = ctx.createRadialGradient(
-                        centerX - size * 0.15, centerY - size * 0.15, size * 0.05,
-                        centerX, centerY, radius
-                    );
-                    
-                    // Cria efeito 3D simulando a curvatura da miçanga
-                    let lightColor = adjustColorBrightness(hex, 40);
-                    let darkColor = adjustColorBrightness(hex, -40);
-                    
-                    gradient.addColorStop(0, lightColor);
-                    gradient.addColorStop(0.7, hex);
-                    gradient.addColorStop(1, darkColor);
-
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-                    ctx.fillStyle = gradient;
-                    ctx.fill();
-                    
-                    // Borda sutil de contorno da miçanga
-                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-
-                    // Brilho pontual no topo para dar o aspecto vitrificado/realista
-                    ctx.beginPath();
-                    ctx.arc(centerX - size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
-                    ctx.fill();
-                    ctx.restore();
-
+                    drawBead(ctx, x * size, y * size, size, hex);
                     colorCounts[hex] = (colorCounts[hex] || 0) + 1;
-                    currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
+                    rowColors[hex] = (rowColors[hex] || 0) + 1;
+                    rowArray.push(hex);
                 }
-                rowDetails.push(currentRowColors);
+                rowDetails.push(rowColors);
+                matrixGrid.push(rowArray);
             }
-            return { totals: colorCounts, rows: rowDetails };
+
+            // 2. Processar as Franjas Pendentes (Beaded Fringe) baseadas nas cores da última linha do rosto
+            const bottomRow = matrixGrid[rows - 1] || matrixGrid[0];
+            for (let f = 0; f < fringeRows; f++) {
+                let fringeRowColors = {};
+                let strandColors = [];
+                for (let x = 0; x < cols; x++) {
+                    // Cada fio de franja continua puxando o tom da coluna correspondente, com leves variações estéticas nas pontas
+                    let baseHex = bottomRow[x];
+                    let hex = (f > fringeRows - 3 && Math.random() > 0.6) ? palette[Math.floor(Math.random() * palette.length)] : baseHex;
+
+                    drawBead(ctx, x * size, (rows + f) * size, size, hex);
+                    colorCounts[hex] = (colorCounts[hex] || 0) + 1;
+                    fringeRowColors[hex] = (fringeRowColors[hex] || 0) + 1;
+                    strandColors.push(hex);
+                }
+                fringeDetails.push(fringeRowColors);
+            }
+
+            return { totals: colorCounts, rows: rowDetails, fringe: fringeDetails };
+        }
+
+        function drawBead(ctx, posX, posY, size, hex) {
+            const radius = size * 0.42;
+            const centerX = posX + size / 2;
+            const centerY = posY + size / 2;
+
+            let lightColor = adjustColorBrightness(hex, 40);
+            let darkColor = adjustColorBrightness(hex, -40);
+
+            let gradient = ctx.createRadialGradient(
+                centerX - size * 0.15, centerY - size * 0.15, size * 0.05,
+                centerX, centerY, radius
+            );
+            
+            gradient.addColorStop(0, lightColor);
+            gradient.addColorStop(0.7, hex);
+            gradient.addColorStop(1, darkColor);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Brilho vitrificado
+            ctx.beginPath();
+            ctx.arc(centerX - size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.fill();
+            ctx.restore();
         }
 
         function adjustColorBrightness(hex, amount) {
@@ -347,7 +376,7 @@
             return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         }
 
-        function displayData(result, summaryId, rowsId) {
+        function displayData(result, summaryId, rowsId, fringeId) {
             const summaryDiv = document.getElementById(summaryId);
             summaryDiv.innerHTML = '';
             for (const [hex, count] of Object.entries(result.totals)) {
@@ -367,8 +396,22 @@
                     .join(' | ');
                 
                 rowDiv.innerHTML += `
-                    <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800/80 shadow-sm">
-                        <strong class="text-emerald-400 font-mono">Linha ${index + 1}:</strong> ${detailsText}
+                    <div class="bg-gray-900/90 p-2 rounded-xl border border-gray-800/80 shadow-sm">
+                        <strong class="text-amber-400 font-mono">Carreira ${index + 1}:</strong> ${detailsText}
+                    </div>
+                `;
+            });
+
+            const fringeDiv = document.getElementById(fringeId);
+            fringeDiv.innerHTML = '';
+            result.fringe.forEach((rowColors, index) => {
+                let detailsText = Object.entries(rowColors)
+                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${hex};"></span>${count}</span>`)
+                    .join(' | ');
+                
+                fringeDiv.innerHTML += `
+                    <div class="bg-gray-900/90 p-2 rounded-xl border border-gray-800/80 shadow-sm">
+                        <strong class="text-orange-400 font-mono">Franja Nível ${index + 1}:</strong> ${detailsText}
                     </div>
                 `;
             });

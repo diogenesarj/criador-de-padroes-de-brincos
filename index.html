@@ -120,7 +120,7 @@
             const imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
             const imgDataRight = (mode === 'sym') ? tempCtx.getImageData(cols, 0, cols, rows) : imgDataLeft;
 
-            // --- MÁGICA DA IA AQUI: Redução de Cores (K-Means simplificado) ---
+            // --- IA DE REDUÇÃO DE CORES (K-Means simplificado) ---
             // Processa a imagem inteira para encontrar as cores dominantes do par
             const combinedData = tempCtx.getImageData(0,0, drawWidth, rows).data;
             const dominantPalette = quantizeImageColors(combinedData, maxColors);
@@ -133,32 +133,27 @@
             const resultR = processSideWithPalette(ctxR, imgDataRight, cols, rows, (mode === 'sym'), dominantPalette);
             displayPalette('summaryRight', resultR.paletteCount);
 
-            // Exibe resumo de linhas (usando o lado esquerdo como base, já que são iguais ou o par se completa)
+            // Exibe resumo de linhas (usa o lado esquerdo como base)
             displayRowSummary(resultL.rowDetails);
 
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        // Algoritmo K-Means Simplificado para encontrar a paleta dominante
         function quantizeImageColors(pixelData, maxColors) {
-            // Converte Uint8ClampedArray para array de pixels [r,g,b] ignorando alfa
             let pixels = [];
             for(let i = 0; i < pixelData.length; i += 4) {
                 pixels.push([pixelData[i], pixelData[i+1], pixelData[i+2]]);
             }
 
-            // Se houver menos cores do que o solicitado, retorna as cores únicas
             let uniqueColors = getUniqueColors(pixels);
             if(uniqueColors.length <= maxColors) return uniqueColors;
 
-            // K-Means Básico (Centroids iniciais aleatórios)
             let centroids = [];
             for(let i = 0; i < maxColors; i++) {
                 centroids.push(pixels[Math.floor(Math.random() * pixels.length)]);
             }
 
-            let currentAssignments = new Array(pixels.length);
-            let iterations = 10; // Poucas iterações para ser rápido no WebApp
+            let iterations = 10; 
 
             while(iterations--) {
                 let newCentroids = new Array(maxColors).fill(0).map(()=>[0,0,0]);
@@ -169,12 +164,8 @@
                     let assignedCentroid = 0;
                     for(let j = 0; j < maxColors; j++) {
                         let dist = colorDistance(pixels[i], centroids[j]);
-                        if(dist < minDist) {
-                            minDist = dist;
-                            assignedCentroid = j;
-                        }
+                        if(dist < minDist) { minDist = dist; assignedCentroid = j; }
                     }
-                    currentAssignments[i] = assignedCentroid;
                     newCentroids[assignedCentroid][0] += pixels[i][0];
                     newCentroids[assignedCentroid][1] += pixels[i][1];
                     newCentroids[assignedCentroid][2] += pixels[i][2];
@@ -197,10 +188,7 @@
             let result = [];
             for(let p of pixels) {
                 let hex = rgbToHex(p[0],p[1],p[2]);
-                if(!seen.has(hex)) {
-                    seen.add(hex);
-                    result.push(hex);
-                }
+                if(!seen.has(hex)) { seen.add(hex); result.push(hex); }
             }
             return result;
         }
@@ -209,7 +197,6 @@
             return Math.pow(c1[0]-c2[0], 2) + Math.pow(c1[1]-c2[1], 2) + Math.pow(c1[2]-c2[2], 2);
         }
 
-        // Processa o lado usando a paleta definida pela IA
         function processSideWithPalette(ctx, imgData, cols, rows, mirror, palette) {
             const data = imgData.data;
             const paletteCount = {};
@@ -225,12 +212,11 @@
                     
                     let hex = '#FFFFFF';
                     if(a > 128) {
-                        // Encontra a cor da paleta mais próxima para este pixel
                         hex = findClosestColor(r, g, b, palette);
                     }
 
                     ctx.fillStyle = hex;
-                    ctx.fillRect(x * beadSize, y * beadSize, beadSize - 1, beadSize - 1); // Pequeno gap entre missangas
+                    ctx.fillRect(x * beadSize, y * beadSize, beadSize - 1, beadSize - 1);
                     
                     paletteCount[hex] = (paletteCount[hex] || 0) + 1;
                     currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
@@ -249,3 +235,33 @@
                 let pB = parseInt(palette[i].substr(5,2),16);
                 let dist = Math.pow(r-pR,2) + Math.pow(g-pG,2) + Math.pow(b-pB,2);
                 if(dist < minDist) { minDist = dist; closest = palette[i]; }
+            }
+            return closest;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        // --- FUNÇÕES DE EXIBIÇÃO CORRIGIDAS ---
+        function displayPalette(containerId, counts) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            // Ordena por quantidade (mais usadas primeiro)
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+            
+            for (const [hex, count] of sorted) {
+                container.innerHTML += `
+                    <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
+                        <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
+                        <span class="text-xs text-gray-300"><b>${count}</b> un</span>
+                    </div>
+                `;
+            }
+        }
+
+        function displayRowSummary(rowDetails) {
+            const container = document.getElementById('rowSummary');
+            container.innerHTML = '';
+            rowDetails.forEach((row, i) => {
+                

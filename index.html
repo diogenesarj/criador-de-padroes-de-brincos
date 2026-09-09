@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
             <div class="space-y-2 lg:col-span-1">
                 <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">1. Foto</label>
-                <input type="file" id="imageInput" accept="image/*" onchange="previewFile()" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura</label>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="md:col-span-2">
-                <button onclick="processImage()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99] cursor-pointer">
+                <button id="generateBtn" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99] cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     Gerar Projeto de Brinco (Brick Stitch + Franjas)
                 </button>
@@ -125,53 +125,66 @@
         const beadSize = 20;
         let imageDataURL = null;
 
-        function previewFile() {
-            const fileInput = document.getElementById('imageInput');
-            const previewContainer = document.getElementById('previewContainer');
-            const fileNameSpan = document.getElementById('fileName');
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageInput = document.getElementById('imageInput');
+            const generateBtn = document.getElementById('generateBtn');
 
-            if (fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                fileNameSpan.textContent = file.name;
+            imageInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                const previewContainer = document.getElementById('previewContainer');
+                const fileNameSpan = document.getElementById('fileName');
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imageDataURL = e.target.result;
-                    previewContainer.innerHTML = `<img src="${imageDataURL}" class="w-full h-full object-cover">`;
+                if (file) {
+                    fileNameSpan.textContent = file.name;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imageDataURL = e.target.result;
+                        previewContainer.innerHTML = `<img src="${imageDataURL}" class="w-full h-full object-cover">`;
+                    };
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
-        }
+            });
 
-        function processImage() {
-            if (!imageDataURL) {
-                alert('Por favor, selecione uma foto de referência válida primeiro.');
-                return;
-            }
+            generateBtn.addEventListener('click', () => {
+                if (!imageDataURL) {
+                    alert('Por favor, selecione uma foto de referência válida primeiro.');
+                    return;
+                }
 
-            const cols = parseInt(document.getElementById('colsInput').value);
-            const rows = parseInt(document.getElementById('rowsInput').value);
-            const fringeRows = parseInt(document.getElementById('fringeRowsInput').value);
-            const mode = document.getElementById('modeInput').value;
-            const maxColors = parseInt(document.getElementById('maxColorsInput').value);
+                try {
+                    const cols = parseInt(document.getElementById('colsInput').value) || 16;
+                    const rows = parseInt(document.getElementById('rowsInput').value) || 18;
+                    const fringeRows = parseInt(document.getElementById('fringeRowsInput').value) || 10;
+                    const mode = document.getElementById('modeInput').value;
+                    const maxColors = parseInt(document.getElementById('maxColorsInput').value) || 5;
 
-            if (mode === 'sym') {
-                document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
-                document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
-            } else {
-                document.getElementById('titleLeft').textContent = 'Peça 1';
-                document.getElementById('titleRight').textContent = 'Peça 2';
-            }
+                    if (mode === 'sym') {
+                        document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
+                        document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
+                    } else {
+                        document.getElementById('titleLeft').textContent = 'Peça 1';
+                        document.getElementById('titleRight').textContent = 'Peça 2';
+                    }
 
-            const img = new Image();
-            img.onload = function() {
-                generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
-            };
-            img.onerror = function() {
-                alert('Erro ao carregar os dados da imagem. Tente outra foto.');
-            };
-            img.src = imageDataURL;
-        }
+                    const img = new Image();
+                    img.onload = function() {
+                        try {
+                            generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
+                        } catch (err) {
+                            console.error(err);
+                            alert('Erro no processamento gráfico: ' + err.message);
+                        }
+                    };
+                    img.onerror = function() {
+                        alert('Falha ao decodificar a imagem selecionada.');
+                    };
+                    img.src = imageDataURL;
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro inesperado: ' + err.message);
+                }
+            });
+        });
 
         function generateEarringProject(img, cols, rows, fringeRows, mode, maxColors) {
             const canvasL = document.getElementById('canvasLeft');

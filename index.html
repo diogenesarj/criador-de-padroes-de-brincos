@@ -15,11 +15,11 @@
 <body class="bg-gray-950 text-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-amber-500 selection:text-gray-950">
 
     <!-- Container Principal / Header -->
-    <div class="w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-gray-800 backdrop-blur-md">
+    <div class="w-full max-w-6xl bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-gray-800 backdrop-blur-md">
         <div class="flex flex-col items-center text-center mb-8">
-            <span class="px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Especialista em Brinco Artesanal</span>
+            <span class="px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê Pro • Editor Sincronizado</span>
             <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Brick Stitch & Beaded Fringe Designer</h1>
-            <p class="text-sm md:text-base text-gray-400 max-w-xl">Transforme qualquer foto no gráfico perfeito de miçangas com base estruturada e franjas pendentes.</p>
+            <p class="text-sm md:text-base text-gray-400 max-w-xl">Gere gráficos detalhados, receitas minuciosas por carreira e paletas de cores totalmente interativas e sincronizadas para seus pares.</p>
         </div>
 
         <!-- Controles -->
@@ -29,31 +29,31 @@
                 <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura</label>
-                <input type="number" id="colsInput" value="16" min="6" max="50" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura (Colunas)</label>
+                <input type="number" id="colsInput" value="14" min="6" max="40" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Altura Base</label>
-                <input type="number" id="rowsInput" value="18" min="5" max="50" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
+                <input type="number" id="rowsInput" value="16" min="5" max="40" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">Franjas</label>
-                <input type="number" id="fringeRowsInput" value="10" min="0" max="30" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
+                <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">Níveis de Franjas</label>
+                <input type="number" id="fringeRowsInput" value="8" min="0" max="25" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-amber-500 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Criação</label>
                 <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-3 py-2.5 text-white text-xs font-medium focus:outline-none focus:border-amber-500 transition">
-                    <option value="sym">Par Simétrico (Esq/Dir)</option>
+                    <option value="sym">Par Simétrico (Espelhado)</option>
                     <option value="single">Peça Única</option>
                 </select>
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">Máx. Cores</label>
-                <input type="number" id="maxColorsInput" value="5" min="2" max="15" class="w-full bg-gray-950/60 border-2 border-amber-500/80 rounded-2xl px-4 py-2.5 text-white font-bold focus:outline-none focus:border-amber-400 transition">
+                <input type="number" id="maxColorsInput" value="4" min="2" max="10" class="w-full bg-gray-950/60 border-2 border-amber-500/80 rounded-2xl px-4 py-2.5 text-white font-bold focus:outline-none focus:border-amber-400 transition">
             </div>
         </div>
 
-        <!-- Preview da Foto Carregada e Botão -->
+        <!-- Preview da Foto e Botão Gerar -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
             <div class="flex items-center gap-3 bg-gray-950/50 p-2.5 rounded-2xl border border-gray-800">
                 <div id="previewContainer" class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center overflow-hidden border border-gray-700 shrink-0">
@@ -61,40 +61,55 @@
                 </div>
                 <div class="text-xs truncate">
                     <span id="fileName" class="text-gray-300 font-medium block truncate">Nenhum arquivo selecionado</span>
-                    <span class="text-gray-500 text-[10px]">Pronto para gerar</span>
+                    <span class="text-gray-500 text-[10px]">Pronto para processar</span>
                 </div>
             </div>
 
             <div class="md:col-span-2">
                 <button id="generateBtn" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99] cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    Gerar Projeto de Brinco (Brick Stitch + Franjas)
+                    Gerar Projeto Profissional Sincronizado
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Painel de Legenda e Cores Sincronizadas Global (Editável) -->
+    <div id="globalPaletteContainer" class="w-full max-w-6xl hidden bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-amber-500/30">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
+            <div>
+                <h2 class="text-lg font-bold text-amber-400">Paleta de Cores Sincronizada (Editável)</h2>
+                <p class="text-xs text-gray-400">Altere os tons abaixo para refletir instantaneamente em ambas as peças do par simétrico.</p>
+            </div>
+            <span class="text-[10px] bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20 font-semibold uppercase tracking-wider">Tempo Real</span>
+        </div>
+        <div id="paletteEditorGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            <!-- Gerado via JS -->
+        </div>
+    </div>
+
     <!-- Resultados Lado a Lado -->
-    <div id="resultContainer" class="w-full max-w-5xl hidden flex flex-col gap-6">
+    <div id="resultContainer" class="w-full max-w-6xl hidden flex flex-col gap-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Brinco 1 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
                     <h2 id="titleLeft" class="text-lg font-bold text-amber-400">Brinco Esquerdo</h2>
-                    <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/20 font-semibold uppercase tracking-wider">Painel 1</span>
+                    <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/20 font-semibold uppercase tracking-wider">Painel A</span>
                 </div>
                 
-                <div class="overflow-auto max-h-[500px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                <div class="overflow-auto max-h-[450px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
                     <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Miçangas por Cor</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total Consolidado de Miçangas</h3>
                 <div id="summaryLeft" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Base (Brick Stitch)</h3>
-                <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 w-full mb-2">Instruções Passo a Passo: Base Brick Stitch</h3>
+                <p class="text-[11px] text-gray-400 w-full mb-3">Inicie pela base de escada superior e siga a costura carreira por carreira:</p>
+                <div id="rowsLeft" class="max-h-48 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Franjas Pendentes</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-orange-400 w-full mb-2">Instruções Passo a Passo: Franjas Pendentes</h3>
                 <div id="fringeLeft" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
 
@@ -102,20 +117,21 @@
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
                     <h2 id="titleRight" class="text-lg font-bold text-amber-400">Brinco Direito (Espelhado)</h2>
-                    <span class="text-[10px] bg-orange-500/10 text-orange-300 px-2.5 py-1 rounded-full border border-orange-500/20 font-semibold uppercase tracking-wider">Painel 2</span>
+                    <span class="text-[10px] bg-orange-500/10 text-orange-300 px-2.5 py-1 rounded-full border border-orange-500/20 font-semibold uppercase tracking-wider">Painel B</span>
                 </div>
 
-                <div class="overflow-auto max-h-[500px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                <div class="overflow-auto max-h-[450px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
                     <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Miçangas por Cor</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total Consolidado de Miçangas</h3>
                 <div id="summaryRight" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Base (Brick Stitch)</h3>
-                <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 w-full mb-2">Instruções Passo a Passo: Base Brick Stitch</h3>
+                <p class="text-[11px] text-gray-400 w-full mb-3">Inicie pela base de escada superior e siga a costura carreira por carreira:</p>
+                <div id="rowsRight" class="max-h-48 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800 mb-4"></div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Receita: Franjas Pendentes</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-orange-400 w-full mb-2">Instruções Passo a Passo: Franjas Pendentes</h3>
                 <div id="fringeRight" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
         </div>
@@ -124,6 +140,8 @@
     <script>
         const beadSize = 20;
         let imageDataURL = null;
+        let currentGlobalPalette = [];
+        let lastProcessedData = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             const imageInput = document.getElementById('imageInput');
@@ -152,41 +170,68 @@
                 }
 
                 try {
-                    const cols = parseInt(document.getElementById('colsInput').value) || 16;
-                    const rows = parseInt(document.getElementById('rowsInput').value) || 18;
-                    const fringeRows = parseInt(document.getElementById('fringeRowsInput').value) || 10;
-                    const mode = document.getElementById('modeInput').value;
-                    const maxColors = parseInt(document.getElementById('maxColorsInput').value) || 5;
-
-                    if (mode === 'sym') {
-                        document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
-                        document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
-                    } else {
-                        document.getElementById('titleLeft').textContent = 'Peça 1';
-                        document.getElementById('titleRight').textContent = 'Peça 2';
-                    }
-
-                    const img = new Image();
-                    img.onload = function() {
-                        try {
-                            generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
-                        } catch (err) {
-                            console.error(err);
-                            alert('Erro no processamento gráfico: ' + err.message);
-                        }
-                    };
-                    img.onerror = function() {
-                        alert('Falha ao decodificar a imagem selecionada.');
-                    };
-                    img.src = imageDataURL;
+                    runProjectGeneration();
                 } catch (err) {
                     console.error(err);
-                    alert('Erro inesperado: ' + err.message);
+                    alert('Erro no processamento gráfico: ' + err.message);
                 }
             });
         });
 
-        function generateEarringProject(img, cols, rows, fringeRows, mode, maxColors) {
+        function runProjectGeneration() {
+            const cols = parseInt(document.getElementById('colsInput').value) || 14;
+            const rows = parseInt(document.getElementById('rowsInput').value) || 16;
+            const fringeRows = parseInt(document.getElementById('fringeRowsInput').value) || 8;
+            const mode = document.getElementById('modeInput').value;
+            const maxColors = parseInt(document.getElementById('maxColorsInput').value) || 4;
+
+            if (mode === 'sym') {
+                document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
+                document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
+            } else {
+                document.getElementById('titleLeft').textContent = 'Peça 1';
+                document.getElementById('titleRight').textContent = 'Peça 2';
+            }
+
+            const img = new Image();
+            img.onload = function() {
+                const tempCanvas = document.createElement('canvas');
+                const drawWidth = (mode === 'sym') ? cols * 2 : cols;
+                tempCanvas.width = drawWidth;
+                tempCanvas.height = rows;
+                const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+                
+                tempCtx.fillStyle = '#FFFFFF';
+                tempCtx.fillRect(0, 0, drawWidth, rows);
+                tempCtx.drawImage(img, 0, 0, drawWidth, rows);
+
+                const fullImageData = tempCtx.getImageData(0, 0, drawWidth, rows).data;
+                currentGlobalPalette = generateColorPalette(fullImageData, maxColors);
+
+                let imgDataLeft, imgDataRight;
+                if (mode === 'sym') {
+                    imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+                    imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
+                } else {
+                    imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+                    imgDataRight = imgDataLeft;
+                }
+
+                lastProcessedData = { imgDataLeft, imgDataRight, cols, rows, fringeRows, mirrorRight: (mode === 'sym') };
+                
+                renderAll();
+                buildEditablePaletteUI();
+
+                document.getElementById('globalPaletteContainer').classList.remove('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+            };
+            img.src = imageDataURL;
+        }
+
+        function renderAll() {
+            if (!lastProcessedData) return;
+            const { imgDataLeft, imgDataRight, cols, rows, fringeRows, mirrorRight } = lastProcessedData;
+
             const canvasL = document.getElementById('canvasLeft');
             const canvasR = document.getElementById('canvasRight');
             const ctxL = canvasL.getContext('2d');
@@ -198,36 +243,42 @@
             canvasR.width = cols * beadSize;
             canvasR.height = totalHeight * beadSize;
 
-            const tempCanvas = document.createElement('canvas');
-            const drawWidth = (mode === 'sym') ? cols * 2 : cols;
-            tempCanvas.width = drawWidth;
-            tempCanvas.height = rows;
-            const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
-            
-            tempCtx.fillStyle = '#FFFFFF';
-            tempCtx.fillRect(0, 0, drawWidth, rows);
-            tempCtx.drawImage(img, 0, 0, drawWidth, rows);
+            const dataL = processEarringSide(ctxL, imgDataLeft, cols, rows, fringeRows, beadSize, false, currentGlobalPalette);
+            displayDetailedData(dataL, 'summaryLeft', 'rowsLeft', 'fringeLeft');
 
-            const fullImageData = tempCtx.getImageData(0, 0, drawWidth, rows).data;
-            const palette = generateColorPalette(fullImageData, maxColors);
+            const dataR = processEarringSide(ctxR, imgDataRight, cols, rows, fringeRows, beadSize, mirrorRight, currentGlobalPalette);
+            displayDetailedData(dataR, 'summaryRight', 'rowsRight', 'fringeRight');
+        }
 
-            let imgDataLeft, imgDataRight;
-            if (mode === 'sym') {
-                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-                imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
-            } else {
-                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-                imgDataRight = imgDataLeft;
-            }
+        function buildEditablePaletteUI() {
+            const container = document.getElementById('paletteEditorGrid');
+            container.innerHTML = '';
 
-            const dataL = processEarringSide(ctxL, imgDataLeft, cols, rows, fringeRows, beadSize, false, palette);
-            displayData(dataL, 'summaryLeft', 'rowsLeft', 'fringeLeft');
+            currentGlobalPalette.forEach((rgb, idx) => {
+                let hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+                container.innerHTML += `
+                    <div class="flex flex-col gap-1.5 bg-gray-950/60 p-3 rounded-2xl border border-gray-800">
+                        <span class="text-[10px] text-gray-400 font-bold uppercase">Cor ${idx + 1}</span>
+                        <div class="flex items-center gap-2">
+                            <input type="color" value="${hex}" data-index="${idx}" class="color-picker-input w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent">
+                            <span class="text-xs font-mono text-gray-300 uppercase">${hex}</span>
+                        </div>
+                    </div>
+                `;
+            });
 
-            const mirrorRight = (mode === 'sym');
-            const dataR = processEarringSide(ctxR, imgDataRight, cols, rows, fringeRows, beadSize, mirrorRight, palette);
-            displayData(dataR, 'summaryRight', 'rowsRight', 'fringeRight');
+            document.querySelectorAll('.color-picker-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const idx = parseInt(e.target.dataset.index);
+                    const newHex = e.target.value;
+                    let r = parseInt(newHex.substring(1, 3), 16);
+                    let g = parseInt(newHex.substring(3, 5), 16);
+                    let b = parseInt(newHex.substring(5, 7), 16);
 
-            document.getElementById('resultContainer').classList.remove('hidden');
+                    currentGlobalPalette[idx] = [r, g, b];
+                    renderAll();
+                });
+            });
         }
 
         function generateColorPalette(pixelData, maxColors) {
@@ -303,7 +354,6 @@
 
             let matrixGrid = [];
             for (let y = 0; y < rows; y++) {
-                let rowColors = {};
                 let rowArray = [];
                 for (let x = 0; x < cols; x++) {
                     let targetX = mirror ? (cols - 1 - x) : x;
@@ -321,25 +371,24 @@
 
                     drawBead(ctx, x * size, y * size, size, hex);
                     colorCounts[hex] = (colorCounts[hex] || 0) + 1;
-                    rowColors[hex] = (rowColors[hex] || 0) + 1;
                     rowArray.push(hex);
                 }
-                rowDetails.push(rowColors);
+                rowDetails.push(rowArray);
                 matrixGrid.push(rowArray);
             }
 
             const bottomRow = matrixGrid[rows - 1] || matrixGrid[0];
             for (let f = 0; f < fringeRows; f++) {
-                let fringeRowColors = {};
+                let fringeRowArray = [];
                 for (let x = 0; x < cols; x++) {
                     let baseHex = bottomRow[x];
                     let hex = (f > fringeRows - 3 && Math.random() > 0.6) ? palette[Math.floor(Math.random() * palette.length)] : baseHex;
 
                     drawBead(ctx, x * size, (rows + f) * size, size, hex);
                     colorCounts[hex] = (colorCounts[hex] || 0) + 1;
-                    fringeRowColors[hex] = (fringeRowColors[hex] || 0) + 1;
+                    fringeRowArray.push(hex);
                 }
-                fringeDetails.push(fringeRowColors);
+                fringeDetails.push(fringeRowArray);
             }
 
             return { totals: colorCounts, rows: rowDetails, fringe: fringeDetails };
@@ -350,9 +399,7 @@
             const centerX = posX + size / 2;
             const centerY = posY + size / 2;
 
-            // Normaliza a cor base de entrada com segurança absoluta
             const safeHex = parseColorToHex(hex);
-
             let lightColor = adjustColorBrightness(safeHex, 45);
             let darkColor = adjustColorBrightness(safeHex, -45);
 
@@ -384,7 +431,6 @@
 
         function parseColorToHex(input) {
             if (!input) return '#FFFFFF';
-            // Se vier no formato de string com vírgulas ex: "122,105,95" ou "(122,105,95)"
             let cleanInput = String(input).replace(/[()]/g, '').trim();
             if (cleanInput.includes(',')) {
                 let parts = cleanInput.split(',').map(p => parseInt(p.trim(), 10));
@@ -392,7 +438,6 @@
                     return rgbToHex(parts[0], parts[1], parts[2]);
                 }
             }
-            // Se já for hex
             if (cleanInput.startsWith('#')) return cleanInput;
             if (cleanInput.length === 6) return '#' + cleanInput;
             return '#FFFFFF';
@@ -405,7 +450,7 @@
             let b = parseInt(safeHex.substring(4, 6), 16) + amount;
 
             r = Math.max(0, Math.min(255, r));
-            g = Math.max(0, Math.min(255, g));
+            g = Math.max(0, Math.min(255, b));
             b = Math.max(0, Math.min(255, b));
 
             return rgbToHex(r, g, b);
@@ -415,7 +460,7 @@
             return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         }
 
-        function displayData(result, summaryId, rowsId, fringeId) {
+        function displayDetailedData(result, summaryId, rowsId, fringeId) {
             const summaryDiv = document.getElementById(summaryId);
             summaryDiv.innerHTML = '';
             for (const [hex, count] of Object.entries(result.totals)) {
@@ -430,34 +475,45 @@
 
             const rowDiv = document.getElementById(rowsId);
             rowDiv.innerHTML = '';
-            result.rows.forEach((rowColors, index) => {
-                let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => {
-                        let safeHex = parseColorToHex(hex);
-                        return `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${safeHex};"></span>${count}</span>`;
-                    })
-                    .join(' | ');
-                
+            result.rows.forEach((rowArray, index) => {
+                let beadSequenceHtml = rowArray.map((hex, i) => {
+                    let safeHex = parseColorToHex(hex);
+                    return `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-700 align-middle shadow-sm mx-0.5" style="background-color: ${safeHex};" title="Miçanga ${i+1}"></span>`;
+                }).join('');
+
+                let direction = (index % 2 === 0) ? 'Esq → Dir' : 'Dir → Esq';
+                let startType = (index === 0) ? 'Base de Escada (Ladder Stitch)' : 'Costura Brick Stitch normal';
+
                 rowDiv.innerHTML += `
-                    <div class="bg-gray-900/90 p-2 rounded-xl border border-gray-800/80 shadow-sm">
-                        <strong class="text-amber-400 font-mono">Carreira ${index + 1}:</strong> ${detailsText}
+                    <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800/80 shadow-sm flex flex-col gap-1.5">
+                        <div class="flex justify-between items-center text-[11px]">
+                            <strong class="text-amber-400 font-mono">Carreira ${index + 1}</strong>
+                            <span class="text-gray-400 bg-gray-950 px-2 py-0.5 rounded-md border border-gray-800">${startType} (${direction})</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1 bg-gray-950/50 p-1.5 rounded-lg border border-gray-800/60 overflow-x-auto">
+                            <span class="text-[10px] text-gray-500 font-bold mr-1">Ordem:</span> ${beadSequenceHtml}
+                        </div>
                     </div>
                 `;
             });
 
             const fringeDiv = document.getElementById(fringeId);
             fringeDiv.innerHTML = '';
-            result.fringe.forEach((rowColors, index) => {
-                let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => {
-                        let safeHex = parseColorToHex(hex);
-                        return `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${safeHex};"></span>${count}</span>`;
-                    })
-                    .join(' | ');
-                
+            result.fringe.forEach((fringeArray, index) => {
+                let fringeSequenceHtml = fringeArray.map((hex, i) => {
+                    let safeHex = parseColorToHex(hex);
+                    return `<span class="inline-block w-3 h-3 rounded-full border border-gray-700 align-middle shadow-sm mx-0.5" style="background-color: ${safeHex};" title="Conta ${i+1}"></span>`;
+                }).join('');
+
                 fringeDiv.innerHTML += `
-                    <div class="bg-gray-900/90 p-2 rounded-xl border border-gray-800/80 shadow-sm">
-                        <strong class="text-orange-400 font-mono">Franja Nível ${index + 1}:</strong> ${detailsText}
+                    <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800/80 shadow-sm flex flex-col gap-1">
+                        <div class="flex justify-between items-center text-[11px]">
+                            <strong class="text-orange-400 font-mono">Franja Nível ${index + 1}</strong>
+                            <span class="text-gray-400 bg-gray-950 px-2 py-0.5 rounded-md border border-gray-800">${fringeArray.length} miçangas pendentes</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1 bg-gray-950/50 p-1.5 rounded-lg border border-gray-800/60 overflow-x-auto">
+                            <span class="text-[10px] text-gray-500 font-bold mr-1">Sequência:</span> ${fringeSequenceHtml}
+                        </div>
                     </div>
                 `;
             });

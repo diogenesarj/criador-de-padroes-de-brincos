@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê de Miçangas - Criador de Pares de Brincos</title>
+    <title>Ateliê de Miçangas - Criador de Pares de Brincos Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estilização suave para a grade de miçangas */
         .bead-canvas {
             image-rendering: pixelated;
         }
-        /* Scrollbars customizados */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -34,31 +32,44 @@
         <div class="flex flex-col items-center text-center mb-8">
             <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê Profissional</span>
             <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Gerador de Par de Brincos</h1>
-            <p class="text-sm md:text-base text-gray-400 max-w-xl">Divida a imagem automaticamente em Brinco Esquerdo e Direito com contagem detalhada de miçangas.</p>
+            <p class="text-sm md:text-base text-gray-400 max-w-xl">Redução inteligente de cores, modo simétrico ou idêntico e contagem detalhada.</p>
         </div>
 
         <!-- Controles -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
-            <div class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="space-y-2 lg:col-span-1">
                 <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">1. Foto do Desenho</label>
-                <div class="relative">
-                    <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-gray-950 hover:file:bg-emerald-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition focus:outline-none focus:border-emerald-500">
-                </div>
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-gray-950 hover:file:bg-emerald-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
             </div>
             <div class="space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura de Cada Brinco</label>
-                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white font-medium focus:outline-none focus:border-emerald-500 transition shadow-inner">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura (un)</label>
+                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-emerald-500 transition">
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Altura (Linhas)</label>
-                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white font-medium focus:outline-none focus:border-emerald-500 transition shadow-inner">
+                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-emerald-500 transition">
+            </div>
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">Máx. Cores (IA)</label>
+                <input type="number" id="maxColorsInput" value="10" min="2" max="30" class="w-full bg-gray-950/60 border-2 border-emerald-500/80 rounded-2xl px-4 py-2.5 text-white font-bold focus:outline-none focus:border-emerald-400 transition">
             </div>
         </div>
 
-        <button onclick="processImage()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-extrabold py-4 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            Gerar Par de Brincos (Esquerdo e Direito)
-        </button>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div class="md:col-span-1 space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Geração</label>
+                <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
+                    <option value="sym">Par Simétrico (Esquerdo + Direito Espelhado)</option>
+                    <option value="single">Imagem Única (Lados Iguais)</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <button onclick="processImage()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Gerar Gráfico Inteligente
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Resultados Lado a Lado -->
@@ -69,14 +80,14 @@
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
                     <h2 class="text-lg font-bold text-emerald-400">Brinco Esquerdo</h2>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold uppercase tracking-wider">Original</span>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold uppercase tracking-wider">Painel Esq</span>
                 </div>
                 
                 <div class="overflow-x-auto w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-white"></canvas>
+                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-white bead-canvas"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores (Esq)</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores Reduzidas</h3>
                 <div id="summaryLeft" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Linhas (Esq)</h3>
@@ -87,14 +98,14 @@
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
                     <h2 class="text-lg font-bold text-emerald-400">Brinco Direito</h2>
-                    <span class="text-[10px] bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full border border-teal-500/20 font-semibold uppercase tracking-wider">Espelhado</span>
+                    <span class="text-[10px] bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full border border-teal-500/20 font-semibold uppercase tracking-wider">Painel Dir</span>
                 </div>
 
                 <div class="overflow-x-auto w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-white"></canvas>
+                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-white bead-canvas"></canvas>
                 </div>
 
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores (Dir)</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores Reduzidas</h3>
                 <div id="summaryRight" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
 
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Linhas (Dir)</h3>
@@ -105,6 +116,8 @@
     </div>
 
     <script>
+        const pixelSize = 16;
+
         function processImage() {
             const fileInput = document.getElementById('imageInput');
             if (fileInput.files.length === 0) {
@@ -114,22 +127,21 @@
 
             const cols = parseInt(document.getElementById('colsInput').value);
             const rows = parseInt(document.getElementById('rowsInput').value);
+            const mode = document.getElementById('modeInput').value;
+            const maxColors = parseInt(document.getElementById('maxColorsInput').value);
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    generateEarrings(img, cols, rows);
+                    generateEarrings(img, cols, rows, mode, maxColors);
                 }
                 img.src = e.target.result;
             }
             reader.readAsDataURL(fileInput.files[0]);
         }
 
-        function generateEarrings(img, cols, rows) {
-            const pixelSize = 16;
-            
-            // Canvas esquerdo e direito
+        function generateEarrings(img, cols, rows, mode, maxColors) {
             const canvasL = document.getElementById('canvasLeft');
             const canvasR = document.getElementById('canvasRight');
             const ctxL = canvasL.getContext('2d');
@@ -140,30 +152,97 @@
             canvasR.width = cols * pixelSize;
             canvasR.height = rows * pixelSize;
 
-            // Canvas temporário com o dobro da largura para cortar a metade esquerda e direita da imagem original
+            // Canvas temporário com largura adequada ao modo
             const tempCanvas = document.createElement('canvas');
-            const totalCols = cols * 2;
-            tempCanvas.width = totalCols;
+            const drawWidth = (mode === 'sym') ? cols * 2 : cols;
+            tempCanvas.width = drawWidth;
             tempCanvas.height = rows;
             const tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(img, 0, 0, totalCols, rows);
+            tempCtx.fillStyle = '#FFFFFF';
+            tempCtx.fillRect(0, 0, drawWidth, rows);
+            tempCtx.drawImage(img, 0, 0, drawWidth, rows);
 
-            // Extrair dados da metade esquerda e direita
+            // Cria paleta reduzida baseada nas cores da imagem inteira
+            const fullImageData = tempCtx.getImageData(0, 0, drawWidth, rows).data;
+            const palette = generateColorPalette(fullImageData, maxColors);
+
+            // Extrair dados da esquerda e direita
             const imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-            const imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
+            const imgDataRight = (mode === 'sym') ? tempCtx.getImageData(cols, 0, cols, rows) : imgDataLeft;
 
-            // Processar Brinco Esquerdo
-            const dataL = processSide(ctxL, imgDataLeft, cols, rows, pixelSize, false);
+            // Processar Esquerdo
+            const dataL = processSideWithPalette(ctxL, imgDataLeft, cols, rows, pixelSize, false, palette);
             displayData(dataL, 'summaryLeft', 'rowsLeft');
 
-            // Processar Brinco Direito (Espelhado para manter a simetria correta do par)
-            const dataR = processSide(ctxR, imgDataRight, cols, rows, pixelSize, true);
+            // Processar Direito (espelhado se modo for 'sym')
+            const mirrorRight = (mode === 'sym');
+            const dataR = processSideWithPalette(ctxR, imgDataRight, cols, rows, pixelSize, mirrorRight, palette);
             displayData(dataR, 'summaryRight', 'rowsRight');
 
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        function processSide(ctx, imgData, cols, rows, pixelSize, mirror) {
+        // Algoritmo simples de agrupamento de cores (K-Means leve)
+        function generateColorPalette(pixelData, maxColors) {
+            let pixels = [];
+            for (let i = 0; i < pixelData.length; i += 4) {
+                if (pixelData[i + 3] > 128) {
+                    pixels.push([pixelData[i], pixelData[i + 1], pixelData[i + 2]]);
+                }
+            }
+            if (pixels.length === 0) return [[255, 255, 255]];
+
+            let centroids = [];
+            for (let i = 0; i < Math.min(maxColors, pixels.length); i++) {
+                centroids.push(pixels[Math.floor(Math.random() * pixels.length)]);
+            }
+
+            for (let iter = 0; iter < 10; iter++) {
+                let clusters = Array.from({ length: centroids.length }, () => []);
+                for (let p of pixels) {
+                    let minDist = Infinity;
+                    let closest = 0;
+                    for (let c = 0; c < centroids.length; c++) {
+                        let dist = Math.abs(p[0] - centroids[c][0]) + Math.abs(p[1] - centroids[c][1]) + Math.abs(p[2] - centroids[c][2]);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            closest = c;
+                        }
+                    }
+                    clusters[closest].push(p);
+                }
+
+                for (let c = 0; c < centroids.length; c++) {
+                    if (clusters[c].length > 0) {
+                        let sumR = 0, sumG = 0, sumB = 0;
+                        for (let p of clusters[c]) {
+                            sumR += p[0]; sumG += p[1]; sumB += p[2];
+                        }
+                        centroids[c] = [
+                            Math.round(sumR / clusters[c].length),
+                            Math.round(sumG / clusters[c].length),
+                            Math.round(sumB / clusters[c].length)
+                        ];
+                    }
+                }
+            }
+            return centroids;
+        }
+
+        function findClosestColorHex(r, g, b, palette) {
+            let minDist = Infinity;
+            let closestRGB = palette[0];
+            for (let c of palette) {
+                let dist = Math.abs(r - c[0]) + Math.abs(g - c[1]) + Math.abs(b - c[2]);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestRGB = c;
+                }
+            }
+            return rgbToHex(closestRGB[0], closestRGB[1], closestRGB[2]);
+        }
+
+        function processSideWithPalette(ctx, imgData, cols, rows, pixelSize, mirror, palette) {
             const data = imgData.data;
             ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
 
@@ -173,18 +252,18 @@
             for (let y = 0; y < rows; y++) {
                 let currentRowColors = {};
                 for (let x = 0; x < cols; x++) {
-                    // Se for o lado direito e quisermos espelhar para casar o desenho:
                     let targetX = mirror ? (cols - 1 - x) : x;
                     const index = (y * cols + targetX) * 4;
 
                     const r = data[index];
                     const g = data[index + 1];
                     const b = data[index + 2];
+                    const a = data[index + 3];
 
-                    const qr = Math.round(r / 64) * 64;
-                    const qg = Math.round(g / 64) * 64;
-                    const qb = Math.round(b / 64) * 64;
-                    const hex = rgbToHex(qr, qg, qb);
+                    let hex = '#FFFFFF';
+                    if (a >= 128) {
+                        hex = findClosestColorHex(r, g, b, palette);
+                    }
 
                     // Desenha na tela real
                     ctx.fillStyle = hex;

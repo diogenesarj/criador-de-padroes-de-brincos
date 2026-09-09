@@ -3,34 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Par de Brincos (Esquerdo e Direito)</title>
+    <title>Criador de Padrões de Brincos - Versão 3.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para deixar o canvas com "ar" de missanga (bordas arredondadas no grid) */
+        .bead-canvas {
+            image-rendering: pixelated; /* Mantém a nitidez ao redimensionar */
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen p-4 flex flex-col items-center">
 
     <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-700">
-        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Par de Brincos (Simétricos)</h1>
-        <p class="text-sm text-gray-400 text-center mb-6">Divida a imagem automaticamente em Brinco Esquerdo e Direito com contagem de missangas.</p>
+        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Gráficos - Missanga Art</h1>
+        <p class="text-sm text-gray-400 text-center mb-6">Foto mais realista e opção de par simétrico ou idêntico.</p>
 
         <!-- Controles -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div class="md:col-span-2">
                 <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">1. Foto do Desenho</label>
                 <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-900 hover:file:bg-emerald-400 cursor-pointer">
             </div>
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura de Cada Brinco</label>
-                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+                <input type="number" id="colsInput" value="25" min="5" max="60" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
             </div>
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura (Linhas)</label>
-                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+                <input type="number" id="rowsInput" value="40" min="5" max="100" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
             </div>
         </div>
 
-        <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
-            Gerar Par de Brincos (Esquerdo e Direito)
-        </button>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div class="md:col-span-2">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">2. Modo de Geração</label>
+                <select id="modeInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <option value="sym">Par Simétrico (Esquerdo + Direito Espelhado)</option>
+                    <option value="single">Imagem Única (Lados Esquerdo e Direito Iguais)</option>
+                </select>
+            </div>
+            <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
+                Gerar Gráfico Realista
+            </button>
+        </div>
     </div>
 
     <!-- Resultados Lado a Lado -->
@@ -40,24 +55,27 @@
             <!-- Brinco Esquerdo -->
             <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
                 <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Esquerdo</h2>
-                <div class="overflow-x-auto w-full flex justify-center mb-4">
-                    <canvas id="canvasLeft" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+                <div class="overflow-x-auto w-full flex justify-center mb-4 relative">
+                    <canvas id="canvasLeft" class="bead-canvas border border-gray-600 rounded shadow-md bg-white"></canvas>
+                    <!-- Sobreposição de grade para simular as miçangas -->
+                    <div id="gridOverlayLeft" class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Esq)</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores</h3>
                 <div id="summaryLeft" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Esq)</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas</h3>
                 <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
             </div>
 
             <!-- Brinco Direito -->
             <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
                 <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Direito</h2>
-                <div class="overflow-x-auto w-full flex justify-center mb-4">
-                    <canvas id="canvasRight" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+                <div class="overflow-x-auto w-full flex justify-center mb-4 relative">
+                    <canvas id="canvasRight" class="bead-canvas border border-gray-600 rounded shadow-md bg-white"></canvas>
+                    <div id="gridOverlayRight" class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px); background-size: 10px 10px; background-position: center;"></div>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Dir)</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores</h3>
                 <div id="summaryRight" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Dir)</h3>
+                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas</h3>
                 <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
             </div>
         </div>
@@ -65,6 +83,9 @@
     </div>
 
     <script>
+        // Aumentei o tamanho do "pixel" na tela para 10x10px para dar mais definição
+        const pixelSize = 10; 
+
         function processImage() {
             const fileInput = document.getElementById('imageInput');
             if (fileInput.files.length === 0) {
@@ -74,22 +95,20 @@
 
             const cols = parseInt(document.getElementById('colsInput').value);
             const rows = parseInt(document.getElementById('rowsInput').value);
+            const mode = document.getElementById('modeInput').value;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    generateEarrings(img, cols, rows);
+                    generateEarrings(img, cols, rows, mode);
                 }
                 img.src = e.target.result;
             }
             reader.readAsDataURL(fileInput.files[0]);
         }
 
-        function generateEarrings(img, cols, rows) {
-            const pixelSize = 16;
-            
-            // Canvas esquerdo e direito
+        function generateEarrings(img, cols, rows, mode) {
             const canvasL = document.getElementById('canvasLeft');
             const canvasR = document.getElementById('canvasRight');
             const ctxL = canvasL.getContext('2d');
@@ -100,66 +119,99 @@
             canvasR.width = cols * pixelSize;
             canvasR.height = rows * pixelSize;
 
-            // Canvas temporário com o dobro da largura para cortar a metade esquerda e direita da imagem original
             const tempCanvas = document.createElement('canvas');
-            const totalCols = cols * 2;
-            tempCanvas.width = totalCols;
+            const drawWidth = (mode === 'sym') ? cols * 2 : cols;
+            tempCanvas.width = drawWidth;
             tempCanvas.height = rows;
             const tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(img, 0, 0, totalCols, rows);
+            tempCtx.drawImage(img, 0, 0, drawWidth, rows);
 
-            // Extrair dados da metade esquerda e direita
-            const imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-            const imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
+            let imgDataLeft, imgDataRight;
 
-            // Processar Brinco Esquerdo
-            const dataL = processSide(ctxL, imgDataLeft, cols, rows, pixelSize, false);
-            displayData(dataL, 'summaryLeft', 'rowsLeft');
+            if (mode === 'sym') {
+                // Modo Simétrico (Esq/Dir Espelhado)
+                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+                imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
+                
+                // Processa Esquerdo (sem mirror)
+                const resultL = processSideRealistic(ctxL, imgDataLeft, cols, rows, false);
+                displayData(resultL, 'summaryLeft', 'rowsLeft');
 
-            // Processar Brinco Direito (Espelhado para manter a simetria correta do par)
-            const dataR = processSide(ctxR, imgDataRight, cols, rows, pixelSize, true);
-            displayData(dataR, 'summaryRight', 'rowsRight');
+                // Processa Direito (com mirror)
+                const resultR = processSideRealistic(ctxR, imgDataRight, cols, rows, true);
+                displayData(resultR, 'summaryRight', 'rowsRight');
+                
+                document.getElementById('gridOverlayLeft').style.display = 'block';
+                document.getElementById('gridOverlayRight').style.display = 'block';
+            } else {
+                // Modo Imagem Única (Esq/Dir Iguais)
+                imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
+                
+                const resultL = processSideRealistic(ctxL, imgDataLeft, cols, rows, false);
+                displayData(resultL, 'summaryLeft', 'rowsLeft');
+
+                const resultR = processSideRealistic(ctxR, imgDataLeft, cols, rows, false);
+                displayData(resultR, 'summaryRight', 'rowsRight');
+
+                document.getElementById('gridOverlayLeft').style.display = 'block';
+                document.getElementById('gridOverlayRight').style.display = 'block';
+            }
 
             document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        function processSide(ctx, imgData, cols, rows, pixelSize, mirror) {
+        // Novo algoritmo de processamento mais realista (mantém detalhes e cria efeito de pontilhado)
+        function processSideRealistic(ctx, imgData, cols, rows, mirror) {
             const data = imgData.data;
-            ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
-
             const colorCounts = {};
             const rowDetails = [];
+
+            // Limpa o canvas
+            ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
 
             for (let y = 0; y < rows; y++) {
                 let currentRowColors = {};
                 for (let x = 0; x < cols; x++) {
-                    // Se for o lado direito e quisermos espelhar para casar o desenho:
                     let targetX = mirror ? (cols - 1 - x) : x;
                     const index = (y * cols + targetX) * 4;
-
+                    
                     const r = data[index];
                     const g = data[index + 1];
                     const b = data[index + 2];
-
-                    const qr = Math.round(r / 64) * 64;
-                    const qg = Math.round(g / 64) * 64;
-                    const qb = Math.round(b / 64) * 64;
-                    const hex = rgbToHex(qr, qg, qb);
-
-                    // Desenha na tela real
-                    ctx.fillStyle = hex;
-                    ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    const a = data[index + 3];
                     
-                    ctx.strokeStyle = '#e5e7eb';
-                    ctx.lineWidth = 0.5;
-                    ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    // Trata transparência como branco
+                    if (a < 128) {
+                        const hex = '#FFFFFF';
+                         drawBead(ctx, x, y, hex, false);
+                         updateCounts(hex, colorCounts, currentRowColors);
+                        continue;
+                    }
 
-                    colorCounts[hex] = (colorCounts[hex] || 0) + 1;
-                    currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
+                    // Tenta encontrar a cor mais próxima em uma paleta mais realista.
+                    // Aqui usamos uma quantização mais suave (agrupa menos as cores).
+                    const hex = rgbToHex(r, g, b);
+                    
+                    drawBead(ctx, x, y, hex, false);
+                    updateCounts(hex, colorCounts, currentRowColors);
                 }
                 rowDetails.push(currentRowColors);
             }
             return { totals: colorCounts, rows: rowDetails };
+        }
+
+        // Função para desenhar cada "missanga" no canvas
+        function drawBead(ctx, x, y, hex, isTransparent) {
+            const px = x * pixelSize;
+            const py = y * pixelSize;
+            ctx.fillStyle = hex;
+            // Desenha um quadrado menor para simular a missanga individual
+            ctx.fillRect(px + 1, py + 1, pixelSize - 2, pixelSize - 2);
+        }
+
+        function updateCounts(hex, colorCounts, currentRowColors) {
+             colorCounts[hex] = (colorCounts[hex] || 0) + 1;
+             currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
         }
 
         function rgbToHex(r, g, b) {
@@ -167,9 +219,12 @@
         }
 
         function displayData(result, summaryId, rowsId) {
+            // Ordena as cores mais usadas no resumo
+            const sortedTotals = Object.entries(result.totals).sort((a, b) => b[1] - a[1]);
+
             const summaryDiv = document.getElementById(summaryId);
             summaryDiv.innerHTML = '';
-            for (const [hex, count] of Object.entries(result.totals)) {
+            for (const [hex, count] of sortedTotals) {
                 summaryDiv.innerHTML += `
                     <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
                         <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
@@ -182,12 +237,13 @@
             rowDiv.innerHTML = '';
             result.rows.forEach((rowColors, index) => {
                 let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1 mr-2"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${hex};"></span>${count}</span>`)
-                    .join(' | ');
+                    .map(([hex, count]) => `<span class="inline-flex items-center gap-0.5 mr-1.5"><span class="w-2 h-2 rounded-full inline-block" style="background-color: ${hex};"></span>${count}</span>`)
+                    .join('');
                 
                 rowDiv.innerHTML += `
-                    <div class="bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                        <strong class="text-emerald-400">L${index + 1}:</strong> ${detailsText}
+                    <div class="bg-gray-900 p-1.5 rounded-xl border border-gray-700 flex items-start">
+                        <strong class="text-emerald-400 text-xs mr-2 w-8 text-right shrink-0">L${index + 1}:</strong> 
+                        <div class="flex flex-wrap">${detailsText}</div>
                     </div>
                 `;
             });

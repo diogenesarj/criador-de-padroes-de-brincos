@@ -3,17 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Padrões de Brincos - Versão 4.0 (IA)</title>
+    <title>Criador de Padrões de Brincos - Versão 4.2 (IA)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bead-canvas { image-rendering: pixelated; }
+        .loader {
+            border-top-color: #10b981;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen p-4 flex flex-col items-center">
 
     <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-700">
         <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Gráficos - IA de Cores</h1>
-        <p class="text-sm text-gray-400 text-center mb-6">Agora com unificação automática de cores próximas. Escolha o limite de cores.</p>
+        <p class="text-sm text-gray-400 text-center mb-6">Define o limite máximo de cores para simplificar o padrão.</p>
 
         <!-- Controles -->
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
@@ -22,28 +35,29 @@
                 <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-900 hover:file:bg-emerald-400 cursor-pointer">
             </div>
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura</label>
-                <input type="number" id="colsInput" value="25" min="5" max="60" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura (un)</label>
+                <input type="number" id="colsInput" value="25" min="5" max="60" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500">
             </div>
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura</label>
-                <input type="number" id="rowsInput" value="40" min="5" max="100" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura (linhas)</label>
+                <input type="number" id="rowsInput" value="40" min="5" max="100" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:border-emerald-500">
             </div>
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-1"><b>Máx. Cores</b> (IA)</label>
-                <input type="number" id="maxColorsInput" value="8" min="2" max="32" class="w-full bg-gray-900 border-2 border-emerald-500 rounded-xl px-3 py-2 text-white font-bold text-lg">
+                <input type="number" id="maxColorsInput" value="10" min="2" max="32" class="w-full bg-gray-900 border-2 border-emerald-500 rounded-xl px-3 py-2 text-white font-bold text-lg focus:ring-emerald-500 focus:border-emerald-500">
             </div>
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Modo</label>
-                <select id="modeInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm">
+                <select id="modeInput" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm focus:border-emerald-500">
                     <option value="sym">Simétrico (Esq+Dir)</option>
                     <option value="single">Único (Iguais)</option>
                 </select>
             </div>
         </div>
 
-        <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
-            Gerar Gráfico com IA de Cores Unificadas
+        <button onclick="processImage()" id="generateBtn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg flex items-center justify-center gap-2">
+            <span>Gerar Gráfico com IA</span>
+            <span id="loaderIcon" class="hidden loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-5 w-5"></span>
         </button>
     </div>
 
@@ -72,19 +86,26 @@
                 <div id="summaryRight" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
             </div>
         </div>
-         <!-- Passo a Passo por Linha (Comum para ambos) -->
+         <!-- Passo a Passo por Linha -->
         <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 w-full">
             <h2 class="text-lg font-bold text-gray-200 mb-3">Contagem por Linha (Padrão para ambos)</h2>
-            <div id="rowSummary" class="max-h-60 overflow-y-auto space-y-1.5 text-xs text-gray-300 pr-2 font-mono"></div>
+            <div id="rowSummary" class="max-h-96 overflow-y-auto space-y-2.5 text-xs text-gray-300 pr-2 font-mono"></div>
         </div>
     </div>
-
     <script>
         const beadSize = 10; 
 
         function processImage() {
             const fileInput = document.getElementById('imageInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const loaderIcon = document.getElementById('loaderIcon');
+
             if (fileInput.files.length === 0) { alert('Selecione uma imagem.'); return; }
+
+            // UI Loading
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-70');
+            loaderIcon.classList.remove('hidden');
 
             const cols = parseInt(document.getElementById('colsInput').value);
             const rows = parseInt(document.getElementById('rowsInput').value);
@@ -95,7 +116,15 @@
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    generateEarrings(img, cols, rows, mode, maxColors);
+                    // Pequeno timeout para garantir que o loader apareça antes do processamento pesado
+                    setTimeout(() => {
+                        generateEarrings(img, cols, rows, mode, maxColors);
+                        
+                        // UI Reset
+                        generateBtn.disabled = false;
+                        generateBtn.classList.remove('opacity-70');
+                        loaderIcon.classList.add('hidden');
+                    }, 50);
                 }
                 img.src = e.target.result;
             }
@@ -121,7 +150,6 @@
             const imgDataRight = (mode === 'sym') ? tempCtx.getImageData(cols, 0, cols, rows) : imgDataLeft;
 
             // --- IA DE REDUÇÃO DE CORES (K-Means simplificado) ---
-            // Processa a imagem inteira para encontrar as cores dominantes do par
             const combinedData = tempCtx.getImageData(0,0, drawWidth, rows).data;
             const dominantPalette = quantizeImageColors(combinedData, maxColors);
 
@@ -137,14 +165,18 @@
             displayRowSummary(resultL.rowDetails);
 
             document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
         }
 
         function quantizeImageColors(pixelData, maxColors) {
             let pixels = [];
             for(let i = 0; i < pixelData.length; i += 4) {
-                pixels.push([pixelData[i], pixelData[i+1], pixelData[i+2]]);
+                if(pixelData[i+3] > 128) { 
+                    pixels.push([pixelData[i], pixelData[i+1], pixelData[i+2]]);
+                }
             }
 
+            if (pixels.length === 0) return ['#FFFFFF'];
             let uniqueColors = getUniqueColors(pixels);
             if(uniqueColors.length <= maxColors) return uniqueColors;
 
@@ -153,8 +185,7 @@
                 centroids.push(pixels[Math.floor(Math.random() * pixels.length)]);
             }
 
-            let iterations = 10; 
-
+            let iterations = 15; 
             while(iterations--) {
                 let newCentroids = new Array(maxColors).fill(0).map(()=>[0,0,0]);
                 let counts = new Array(maxColors).fill(0);
@@ -172,13 +203,17 @@
                     counts[assignedCentroid]++;
                 }
 
+                let changed = false;
                 for(let j = 0; j < maxColors; j++) {
                     if(counts[j] > 0) {
-                        centroids[j][0] = Math.round(newCentroids[j][0] / counts[j]);
-                        centroids[j][1] = Math.round(newCentroids[j][1] / counts[j]);
-                        centroids[j][2] = Math.round(newCentroids[j][2] / counts[j]);
+                        let newR = Math.round(newCentroids[j][0] / counts[j]);
+                        let newG = Math.round(newCentroids[j][1] / counts[j]);
+                        let newB = Math.round(newCentroids[j][2] / counts[j]);
+                        if (Math.abs(newR - centroids[j][0]) > 1 || Math.abs(newG - centroids[j][1]) > 1 || Math.abs(newB - centroids[j][2]) > 1) { changed = true; }
+                        centroids[j][0] = newR; centroids[j][1] = newG; centroids[j][2] = newB;
                     }
                 }
+                if (!changed) break;
             }
             return centroids.map(c => rgbToHex(c[0],c[1],c[2]));
         }
@@ -211,57 +246,10 @@
                     const r = data[index]; const g = data[index + 1]; const b = data[index + 2]; const a = data[index + 3];
                     
                     let hex = '#FFFFFF';
-                    if(a > 128) {
-                        hex = findClosestColor(r, g, b, palette);
-                    }
+                    if(a > 128) { hex = findClosestColor(r, g, b, palette); }
 
                     ctx.fillStyle = hex;
                     ctx.fillRect(x * beadSize, y * beadSize, beadSize - 1, beadSize - 1);
                     
                     paletteCount[hex] = (paletteCount[hex] || 0) + 1;
                     currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
-                }
-                rowDetails.push(currentRowColors);
-            }
-            return { paletteCount, rowDetails };
-        }
-
-        function findClosestColor(r, g, b, palette) {
-            let minDist = Infinity;
-            let closest = palette[0];
-            for (let i = 0; i < palette.length; i++) {
-                let pR = parseInt(palette[i].substr(1,2),16);
-                let pG = parseInt(palette[i].substr(3,2),16);
-                let pB = parseInt(palette[i].substr(5,2),16);
-                let dist = Math.pow(r-pR,2) + Math.pow(g-pG,2) + Math.pow(b-pB,2);
-                if(dist < minDist) { minDist = dist; closest = palette[i]; }
-            }
-            return closest;
-        }
-
-        function rgbToHex(r, g, b) {
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-        }
-
-        // --- FUNÇÕES DE EXIBIÇÃO CORRIGIDAS ---
-        function displayPalette(containerId, counts) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            // Ordena por quantidade (mais usadas primeiro)
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-            
-            for (const [hex, count] of sorted) {
-                container.innerHTML += `
-                    <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                        <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
-                        <span class="text-xs text-gray-300"><b>${count}</b> un</span>
-                    </div>
-                `;
-            }
-        }
-
-        function displayRowSummary(rowDetails) {
-            const container = document.getElementById('rowSummary');
-            container.innerHTML = '';
-            rowDetails.forEach((row, i) => {
-                

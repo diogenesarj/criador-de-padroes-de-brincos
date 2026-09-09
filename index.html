@@ -187,11 +187,13 @@
             canvasR.width = cols * beadSize;
             canvasR.height = totalHeight * beadSize;
 
+            // Motor robusto de redimensionamento intermediário
             const tempCanvas = document.createElement('canvas');
             const drawWidth = (mode === 'sym') ? cols * 2 : cols;
             tempCanvas.width = drawWidth;
             tempCanvas.height = rows;
-            const tempCtx = tempCanvas.getContext('2d');
+            const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+            
             tempCtx.fillStyle = '#FFFFFF';
             tempCtx.fillRect(0, 0, drawWidth, rows);
             tempCtx.drawImage(img, 0, 0, drawWidth, rows);

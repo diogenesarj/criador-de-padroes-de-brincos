@@ -3,62 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Par de Brincos (Esquerdo e Direito)</title>
+    <title>Ateliê de Miçangas - Criador de Pares de Brincos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilização suave para a grade de miçangas */
+        .bead-canvas {
+            image-rendering: pixelated;
+        }
+        /* Scrollbars customizados */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen p-4 flex flex-col items-center">
+<body class="bg-gray-950 text-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-emerald-500 selection:text-gray-950">
 
-    <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-700">
-        <h1 class="text-2xl font-bold text-center text-emerald-400 mb-2">Gerador de Par de Brincos (Simétricos)</h1>
-        <p class="text-sm text-gray-400 text-center mb-6">Divida a imagem automaticamente em Brinco Esquerdo e Direito com contagem de missangas.</p>
+    <!-- Container Principal / Header -->
+    <div class="w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-gray-800 backdrop-blur-md">
+        <div class="flex flex-col items-center text-center mb-8">
+            <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê Profissional</span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Gerador de Par de Brincos</h1>
+            <p class="text-sm md:text-base text-gray-400 max-w-xl">Divida a imagem automaticamente em Brinco Esquerdo e Direito com contagem detalhada de miçangas.</p>
+        </div>
 
         <!-- Controles -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">1. Foto do Desenho</label>
-                <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-900 hover:file:bg-emerald-400 cursor-pointer">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-emerald-400">1. Foto do Desenho</label>
+                <div class="relative">
+                    <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-gray-950 hover:file:bg-emerald-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition focus:outline-none focus:border-emerald-500">
+                </div>
             </div>
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Largura de Cada Brinco</label>
-                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura de Cada Brinco</label>
+                <input type="number" id="colsInput" value="15" min="5" max="40" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white font-medium focus:outline-none focus:border-emerald-500 transition shadow-inner">
             </div>
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Altura (Linhas)</label>
-                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Altura (Linhas)</label>
+                <input type="number" id="rowsInput" value="25" min="5" max="80" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white font-medium focus:outline-none focus:border-emerald-500 transition shadow-inner">
             </div>
         </div>
 
-        <button onclick="processImage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg">
+        <button onclick="processImage()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-extrabold py-4 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             Gerar Par de Brincos (Esquerdo e Direito)
         </button>
     </div>
 
     <!-- Resultados Lado a Lado -->
-    <div id="resultContainer" class="w-full max-w-4xl hidden flex flex-col gap-6">
+    <div id="resultContainer" class="w-full max-w-5xl hidden flex flex-col gap-6">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Brinco Esquerdo -->
-            <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
-                <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Esquerdo</h2>
-                <div class="overflow-x-auto w-full flex justify-center mb-4">
-                    <canvas id="canvasLeft" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+            <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
+                <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
+                    <h2 class="text-lg font-bold text-emerald-400">Brinco Esquerdo</h2>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold uppercase tracking-wider">Original</span>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Esq)</h3>
-                <div id="summaryLeft" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Esq)</h3>
-                <div id="rowsLeft" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
+                
+                <div class="overflow-x-auto w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-white"></canvas>
+                </div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores (Esq)</h3>
+                <div id="summaryLeft" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Linhas (Esq)</h3>
+                <div id="rowsLeft" class="max-h-52 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
 
             <!-- Brinco Direito -->
-            <div class="bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-700 flex flex-col items-center">
-                <h2 class="text-lg font-bold text-emerald-400 mb-3">Brinco Direito</h2>
-                <div class="overflow-x-auto w-full flex justify-center mb-4">
-                    <canvas id="canvasRight" class="border border-gray-600 rounded shadow-md bg-white"></canvas>
+            <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
+                <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
+                    <h2 class="text-lg font-bold text-emerald-400">Brinco Direito</h2>
+                    <span class="text-[10px] bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full border border-teal-500/20 font-semibold uppercase tracking-wider">Espelhado</span>
                 </div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Total de Cores (Dir)</h3>
-                <div id="summaryRight" class="grid grid-cols-2 gap-2 w-full text-xs mb-4"></div>
-                <h3 class="text-sm font-semibold text-gray-300 w-full mb-2">Linhas (Dir)</h3>
-                <div id="rowsRight" class="max-h-40 overflow-y-auto w-full space-y-1 text-xs text-gray-300 pr-1"></div>
+
+                <div class="overflow-x-auto w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-white"></canvas>
+                </div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores (Dir)</h3>
+                <div id="summaryRight" class="grid grid-cols-2 gap-2.5 w-full text-xs mb-6"></div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Linhas (Dir)</h3>
+                <div id="rowsRight" class="max-h-52 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
         </div>
 
@@ -171,8 +211,8 @@
             summaryDiv.innerHTML = '';
             for (const [hex, count] of Object.entries(result.totals)) {
                 summaryDiv.innerHTML += `
-                    <div class="flex items-center gap-2 bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                        <span class="w-4 h-4 rounded-full border border-gray-600 inline-block shrink-0" style="background-color: ${hex};"></span>
+                    <div class="flex items-center gap-2 bg-gray-900 p-2 rounded-xl border border-gray-800 shadow-sm">
+                        <span class="w-4 h-4 rounded-full border border-gray-700 inline-block shrink-0 shadow-inner" style="background-color: ${hex};"></span>
                         <span class="text-xs text-gray-300"><b>${count}</b> un</span>
                     </div>
                 `;
@@ -182,12 +222,12 @@
             rowDiv.innerHTML = '';
             result.rows.forEach((rowColors, index) => {
                 let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1 mr-2"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${hex};"></span>${count}</span>`)
+                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${hex};"></span>${count}</span>`)
                     .join(' | ');
                 
                 rowDiv.innerHTML += `
-                    <div class="bg-gray-900 p-1.5 rounded-xl border border-gray-700">
-                        <strong class="text-emerald-400">L${index + 1}:</strong> ${detailsText}
+                    <div class="bg-gray-900/90 p-2.5 rounded-xl border border-gray-800/80 shadow-sm">
+                        <strong class="text-emerald-400 font-mono">L${index + 1}:</strong> ${detailsText}
                     </div>
                 `;
             });

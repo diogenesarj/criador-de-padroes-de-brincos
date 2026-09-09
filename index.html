@@ -350,8 +350,11 @@
             const centerX = posX + size / 2;
             const centerY = posY + size / 2;
 
-            let lightColor = adjustColorBrightness(hex, 45);
-            let darkColor = adjustColorBrightness(hex, -45);
+            // Normaliza a cor base de entrada com segurança absoluta
+            const safeHex = parseColorToHex(hex);
+
+            let lightColor = adjustColorBrightness(safeHex, 45);
+            let darkColor = adjustColorBrightness(safeHex, -45);
 
             let gradient = ctx.createRadialGradient(
                 centerX - size * 0.15, centerY - size * 0.15, size * 0.05,
@@ -359,7 +362,7 @@
             );
             
             gradient.addColorStop(0, lightColor);
-            gradient.addColorStop(0.7, hex);
+            gradient.addColorStop(0.7, safeHex);
             gradient.addColorStop(1, darkColor);
 
             ctx.save();
@@ -379,20 +382,33 @@
             ctx.restore();
         }
 
+        function parseColorToHex(input) {
+            if (!input) return '#FFFFFF';
+            // Se vier no formato de string com vírgulas ex: "122,105,95" ou "(122,105,95)"
+            let cleanInput = String(input).replace(/[()]/g, '').trim();
+            if (cleanInput.includes(',')) {
+                let parts = cleanInput.split(',').map(p => parseInt(p.trim(), 10));
+                if (parts.length >= 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+                    return rgbToHex(parts[0], parts[1], parts[2]);
+                }
+            }
+            // Se já for hex
+            if (cleanInput.startsWith('#')) return cleanInput;
+            if (cleanInput.length === 6) return '#' + cleanInput;
+            return '#FFFFFF';
+        }
+
         function adjustColorBrightness(hex, amount) {
-            if (!hex || typeof hex !== 'string') return '#FFFFFF';
-            let cleanHex = hex.replace('#', '').trim();
-            if (cleanHex.length !== 6) cleanHex = 'FFFFFF';
-            
-            let r = parseInt(cleanHex.substring(0, 2), 16) + amount;
-            let g = parseInt(cleanHex.substring(2, 4), 16) + amount;
-            let b = parseInt(cleanHex.substring(4, 6), 16) + amount;
+            let safeHex = parseColorToHex(hex).replace('#', '');
+            let r = parseInt(safeHex.substring(0, 2), 16) + amount;
+            let g = parseInt(safeHex.substring(2, 4), 16) + amount;
+            let b = parseInt(safeHex.substring(4, 6), 16) + amount;
 
             r = Math.max(0, Math.min(255, r));
             g = Math.max(0, Math.min(255, g));
             b = Math.max(0, Math.min(255, b));
 
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            return rgbToHex(r, g, b);
         }
 
         function rgbToHex(r, g, b) {
@@ -403,9 +419,10 @@
             const summaryDiv = document.getElementById(summaryId);
             summaryDiv.innerHTML = '';
             for (const [hex, count] of Object.entries(result.totals)) {
+                let safeHex = parseColorToHex(hex);
                 summaryDiv.innerHTML += `
                     <div class="flex items-center gap-2 bg-gray-900 p-2 rounded-xl border border-gray-800 shadow-sm">
-                        <span class="w-4 h-4 rounded-full border border-gray-700 inline-block shrink-0 shadow-inner" style="background-color: ${hex};"></span>
+                        <span class="w-4 h-4 rounded-full border border-gray-700 inline-block shrink-0 shadow-inner" style="background-color: ${safeHex};"></span>
                         <span class="text-xs text-gray-300"><b>${count}</b> miçangas</span>
                     </div>
                 `;
@@ -415,7 +432,10 @@
             rowDiv.innerHTML = '';
             result.rows.forEach((rowColors, index) => {
                 let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${hex};"></span>${count}</span>`)
+                    .map(([hex, count]) => {
+                        let safeHex = parseColorToHex(hex);
+                        return `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${safeHex};"></span>${count}</span>`;
+                    })
                     .join(' | ');
                 
                 rowDiv.innerHTML += `
@@ -429,7 +449,10 @@
             fringeDiv.innerHTML = '';
             result.fringe.forEach((rowColors, index) => {
                 let detailsText = Object.entries(rowColors)
-                    .map(([hex, count]) => `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${hex};"></span>${count}</span>`)
+                    .map(([hex, count]) => {
+                        let safeHex = parseColorToHex(hex);
+                        return `<span class="inline-flex items-center gap-1.5 mr-2.5 my-0.5"><span class="w-2.5 h-2.5 rounded-full inline-block border border-gray-700 shadow-sm" style="background-color: ${safeHex};"></span>${count}</span>`;
+                    })
                     .join(' | ');
                 
                 fringeDiv.innerHTML += `

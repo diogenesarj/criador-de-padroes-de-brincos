@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bead-canvas {
-            image-rendering: pixelated;
+            image-rendering: auto;
         }
         ::-webkit-scrollbar {
             width: 8px;
@@ -31,9 +31,9 @@
     <!-- Container Principal / Header -->
     <div class="w-full max-w-5xl bg-gray-900 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 border border-gray-800 backdrop-blur-md">
         <div class="flex flex-col items-center text-center mb-8">
-            <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê de Miçangas Profissional</span>
+            <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold tracking-wider uppercase mb-3">Ateliê de Miçangas Realista</span>
             <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">Transformador de Foto em Miçangas</h1>
-            <p class="text-sm md:text-base text-gray-400 max-w-xl">Cada quadradinho representa 1 miçanga. Escolha o modo simétrico ou imagem inteira idêntica.</p>
+            <p class="text-sm md:text-base text-gray-400 max-w-xl">Visualização detalhada com formato esférico de miçangas e espelhamento automático.</p>
         </div>
 
         <!-- Controles -->
@@ -60,14 +60,14 @@
             <div class="md:col-span-1 space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Montagem</label>
                 <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
-                    <option value="sym">Par Simétrico (Divide e Espelha L/R)</option>
+                    <option value="sym">Par Simétrico (Espelhado L/R)</option>
                     <option value="single">Imagem Inteira (Lados Idênticos)</option>
                 </select>
             </div>
             <div class="md:col-span-2">
                 <button onclick="processImage()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Gerar Gráfico de Miçangas
+                    Gerar Gráfico Realista de Miçangas
                 </button>
             </div>
         </div>
@@ -80,13 +80,12 @@
             <!-- Lado Esquerdo / Brinco 1 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
-                    <h2 id="titleLeft" class="text-lg font-bold text-emerald-400">Lado Esquerdo</h2>
+                    <h2 id="titleLeft" class="text-lg font-bold text-emerald-400">Brinco Esquerdo</h2>
                     <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold uppercase tracking-wider">Painel 1</span>
                 </div>
                 
-                <!-- Área com scroll para dar zoom/ver todos os quadradinhos -->
-                <div class="overflow-auto max-h-[450px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-white bead-canvas"></canvas>
+                <div class="overflow-auto max-h-[480px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasLeft" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900 bead-canvas"></canvas>
                 </div>
 
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores de Miçangas</h3>
@@ -99,13 +98,12 @@
             <!-- Lado Direito / Brinco 2 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
                 <div class="w-full flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
-                    <h2 id="titleRight" class="text-lg font-bold text-emerald-400">Lado Direito</h2>
+                    <h2 id="titleRight" class="text-lg font-bold text-emerald-400">Brinco Direito (Espelhado)</h2>
                     <span class="text-[10px] bg-teal-500/10 text-teal-300 px-2.5 py-1 rounded-full border border-teal-500/20 font-semibold uppercase tracking-wider">Painel 2</span>
                 </div>
 
-                <!-- Área com scroll para dar zoom/ver todos os quadradinhos -->
-                <div class="overflow-auto max-h-[450px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
-                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-white bead-canvas"></canvas>
+                <div class="overflow-auto max-h-[480px] w-full flex justify-center mb-6 p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 shadow-inner">
+                    <canvas id="canvasRight" class="border border-gray-700/50 rounded-xl shadow-lg bg-gray-900 bead-canvas"></canvas>
                 </div>
 
                 <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 w-full mb-3">Total de Cores de Miçangas</h3>
@@ -119,7 +117,7 @@
     </div>
 
     <script>
-        const pixelSize = 20; // Tamanho ampliado de cada quadradinho para facilitar a visualização
+        const beadSize = 22; // Tamanho visual de cada miçanga
 
         function processImage() {
             const fileInput = document.getElementById('imageInput');
@@ -133,7 +131,6 @@
             const mode = document.getElementById('modeInput').value;
             const maxColors = parseInt(document.getElementById('maxColorsInput').value);
 
-            // Ajusta títulos dependendo do modo
             if (mode === 'sym') {
                 document.getElementById('titleLeft').textContent = 'Brinco Esquerdo';
                 document.getElementById('titleRight').textContent = 'Brinco Direito (Espelhado)';
@@ -159,10 +156,10 @@
             const ctxL = canvasL.getContext('2d');
             const ctxR = canvasR.getContext('2d');
 
-            canvasL.width = cols * pixelSize;
-            canvasL.height = rows * pixelSize;
-            canvasR.width = cols * pixelSize;
-            canvasR.height = rows * pixelSize;
+            canvasL.width = cols * beadSize;
+            canvasL.height = rows * beadSize;
+            canvasR.width = cols * beadSize;
+            canvasR.height = rows * beadSize;
 
             const tempCanvas = document.createElement('canvas');
             const drawWidth = (mode === 'sym') ? cols * 2 : cols;
@@ -182,14 +179,16 @@
                 imgDataRight = tempCtx.getImageData(cols, 0, cols, rows);
             } else {
                 imgDataLeft = tempCtx.getImageData(0, 0, cols, rows);
-                imgDataRight = imgDataLeft; // Idênticas
+                imgDataRight = imgDataLeft;
             }
 
-            const dataL = processSideWithPalette(ctxL, imgDataLeft, cols, rows, pixelSize, false, palette);
+            // Para o lado esquerdo (sem espelhamento interno de matriz)
+            const dataL = processSideAsBeads(ctxL, imgDataLeft, cols, rows, beadSize, false, palette);
             displayData(dataL, 'summaryLeft', 'rowsLeft');
 
+            // Para o lado direito: se o modo for simétrico, espelhamos horizontalmente os pixels para formar o par simétrico perfeito
             const mirrorRight = (mode === 'sym');
-            const dataR = processSideWithPalette(ctxR, imgDataRight, cols, rows, pixelSize, mirrorRight, palette);
+            const dataR = processSideAsBeads(ctxR, imgDataRight, cols, rows, beadSize, mirrorRight, palette);
             displayData(dataR, 'summaryRight', 'rowsRight');
 
             document.getElementById('resultContainer').classList.remove('hidden');
@@ -254,9 +253,13 @@
             return rgbToHex(closestRGB[0], closestRGB[1], closestRGB[2]);
         }
 
-        function processSideWithPalette(ctx, imgData, cols, rows, pixelSize, mirror, palette) {
+        function processSideAsBeads(ctx, imgData, cols, rows, size, mirror, palette) {
             const data = imgData.data;
-            ctx.clearRect(0, 0, cols * pixelSize, rows * pixelSize);
+            ctx.clearRect(0, 0, cols * size, rows * size);
+
+            // Fundo escuro imitando base de apoio
+            ctx.fillStyle = '#090d16';
+            ctx.fillRect(0, 0, cols * size, rows * size);
 
             const colorCounts = {};
             const rowDetails = [];
@@ -277,14 +280,44 @@
                         hex = findClosestColorHex(r, g, b, palette);
                     }
 
-                    // Desenha o quadradinho simulando a miçanga
-                    ctx.fillStyle = hex;
-                    ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    const posX = x * size;
+                    const posY = y * size;
+                    const radius = size * 0.42; // Deixa redondinho como uma miçanga real
+
+                    // Desenha o formato de miçanga esférica com gradiente de brilho e sombra
+                    const centerX = posX + size / 2;
+                    const centerY = posY + size / 2;
+
+                    let gradient = ctx.createRadialGradient(
+                        centerX - size * 0.15, centerY - size * 0.15, size * 0.05,
+                        centerX, centerY, radius
+                    );
                     
-                    // Borda sutil para parecer o quadriculado do papel
-                    ctx.strokeStyle = '#d1d5db';
-                    ctx.lineWidth = 0.8;
-                    ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    // Cria efeito 3D simulando a curvatura da miçanga
+                    let lightColor = adjustColorBrightness(hex, 40);
+                    let darkColor = adjustColorBrightness(hex, -40);
+                    
+                    gradient.addColorStop(0, lightColor);
+                    gradient.addColorStop(0.7, hex);
+                    gradient.addColorStop(1, darkColor);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // Borda sutil de contorno da miçanga
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    // Brilho pontual no topo para dar o aspecto vitrificado/realista
+                    ctx.beginPath();
+                    ctx.arc(centerX - size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+                    ctx.fill();
+                    ctx.restore();
 
                     colorCounts[hex] = (colorCounts[hex] || 0) + 1;
                     currentRowColors[hex] = (currentRowColors[hex] || 0) + 1;
@@ -292,6 +325,22 @@
                 rowDetails.push(currentRowColors);
             }
             return { totals: colorCounts, rows: rowDetails };
+        }
+
+        function adjustColorBrightness(hex, amount) {
+            let usePound = false;
+            if (hex[0] == "#") {
+                hex = hex.slice(1);
+                usePound = true;
+            }
+            let num = parseInt(hex, 16);
+            let r = (num >> 16) + amount;
+            if (r > 255) r = 255; else if (r < 0) r = 0;
+            let b = ((num >> 8) & 0x00FF) + amount;
+            if (b > 255) b = 255; else if (b < 0) b = 0;
+            let g = (num & 0x0000FF) + amount;
+            if (g > 255) g = 255; else if (g < 0) g = 0;
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
         }
 
         function rgbToHex(r, g, b) {

@@ -37,7 +37,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <div class="space-y-2 lg:col-span-1">
                 <label class="block text-xs font-bold uppercase tracking-wider text-amber-400">1. Foto do Rosto</label>
-                <input type="file" id="imageInput" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
+                <input type="file" id="imageInput" accept="image/*" onchange="previewFile()" class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-gray-950 hover:file:bg-amber-400 cursor-pointer bg-gray-950/60 border border-gray-700/80 rounded-2xl p-2 transition">
             </div>
             <div class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Largura (Miçangas)</label>
@@ -57,16 +57,20 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            <div class="md:col-span-1 space-y-2">
-                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400">Modo de Par</label>
-                <select id="modeInput" class="w-full bg-gray-950/60 border border-gray-700/80 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition">
-                    <option value="sym">Par Simétrico (Espelhado Esquerda/Direita)</option>
-                    <option value="single">Lados Idênticos</option>
-                </select>
+        <!-- Preview da Foto Carregada e Botão -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div class="flex items-center gap-3 bg-gray-950/50 p-2.5 rounded-2xl border border-gray-800">
+                <div id="previewContainer" class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center overflow-hidden border border-gray-700 shrink-0">
+                    <span class="text-[10px] text-gray-500 text-center px-1">Sem foto</span>
+                </div>
+                <div class="text-xs truncate">
+                    <span id="fileName" class="text-gray-300 font-medium block truncate">Nenhum arquivo selecionado</span>
+                    <span class="text-gray-500 text-[10px]">Pronto para gerar</span>
+                </div>
             </div>
+
             <div class="md:col-span-2">
-                <button onclick="processImage()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99]">
+                <button onclick="processImage()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-gray-950 font-extrabold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transform active:scale-[0.99] cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     Gerar Projeto de Brinco (Brick Stitch + Franjas)
                 </button>
@@ -76,7 +80,6 @@
 
     <!-- Resultados Lado a Lado -->
     <div id="resultContainer" class="w-full max-w-5xl hidden flex flex-col gap-6">
-        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Brinco 1 -->
             <div class="bg-gray-900 rounded-3xl shadow-2xl p-6 border border-gray-800 flex flex-col items-center">
@@ -120,16 +123,38 @@
                 <div id="fringeRight" class="max-h-40 overflow-y-auto w-full space-y-2 text-xs text-gray-300 pr-1 bg-gray-950/40 p-3 rounded-2xl border border-gray-800"></div>
             </div>
         </div>
-
     </div>
 
     <script>
         const beadSize = 20;
+        let loadedImageObj = null;
+
+        function previewFile() {
+            const fileInput = document.getElementById('imageInput');
+            const previewContainer = document.getElementById('previewContainer');
+            const fileNameSpan = document.getElementById('fileName');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                fileNameSpan.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                    
+                    const img = new Image();
+                    img.onload = function() {
+                        loadedImageObj = img;
+                    };
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
 
         function processImage() {
-            const fileInput = document.getElementById('imageInput');
-            if (fileInput.files.length === 0) {
-                alert('Por favor, selecione uma foto de referência primeiro.');
+            if (!loadedImageObj) {
+                alert('Por favor, selecione uma foto de referência válida primeiro.');
                 return;
             }
 
@@ -147,15 +172,7 @@
                 document.getElementById('titleRight').textContent = 'Peça 2';
             }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    generateEarringProject(img, cols, rows, fringeRows, mode, maxColors);
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(fileInput.files[0]);
+            generateEarringProject(loadedImageObj, cols, rows, fringeRows, mode, maxColors);
         }
 
         function generateEarringProject(img, cols, rows, fringeRows, mode, maxColors) {
@@ -272,7 +289,6 @@
             const rowDetails = [];
             const fringeDetails = [];
 
-            // 1. Processar a Base (Brick Stitch - Rosto)
             let matrixGrid = [];
             for (let y = 0; y < rows; y++) {
                 let rowColors = {};
@@ -300,20 +316,16 @@
                 matrixGrid.push(rowArray);
             }
 
-            // 2. Processar as Franjas Pendentes (Beaded Fringe) baseadas nas cores da última linha do rosto
             const bottomRow = matrixGrid[rows - 1] || matrixGrid[0];
             for (let f = 0; f < fringeRows; f++) {
                 let fringeRowColors = {};
-                let strandColors = [];
                 for (let x = 0; x < cols; x++) {
-                    // Cada fio de franja continua puxando o tom da coluna correspondente, com leves variações estéticas nas pontas
                     let baseHex = bottomRow[x];
                     let hex = (f > fringeRows - 3 && Math.random() > 0.6) ? palette[Math.floor(Math.random() * palette.length)] : baseHex;
 
                     drawBead(ctx, x * size, (rows + f) * size, size, hex);
                     colorCounts[hex] = (colorCounts[hex] || 0) + 1;
                     fringeRowColors[hex] = (fringeRowColors[hex] || 0) + 1;
-                    strandColors.push(hex);
                 }
                 fringeDetails.push(fringeRowColors);
             }
@@ -348,7 +360,6 @@
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Brilho vitrificado
             ctx.beginPath();
             ctx.arc(centerX - size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
